@@ -1,5 +1,4 @@
-
-import 'package:distra_aft/presentation/providers/user/user_permissions_provider.dart';
+import 'package:dsimcaf_1/presentation/providers/user/user_permissions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -105,6 +104,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -356,9 +356,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                       child:
                           _isLoading
@@ -373,8 +371,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               : const Text(
                                 'Acceder',
                                 style: TextStyle(
-                                  fontSize:
-                                      15,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
@@ -384,7 +381,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                   const SizedBox(height: 12),
 
-                
                   SizedBox(
                     width: double.infinity,
                     height: 48,
@@ -397,9 +393,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                       child:
                           _isLoading
@@ -414,8 +408,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               : const Text(
                                 'Acceder como invitado',
                                 style: TextStyle(
-                                  fontSize:
-                                      15,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),

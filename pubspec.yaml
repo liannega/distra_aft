@@ -1,4 +1,4 @@
-name: distra_aft
+name: dsimcaf_1
 description: "Aplicación móvil offline-first para conteo de Activos Fijos Tangibles (AFT) integrada con DISTRA ERP."
 publish_to: 'none'
 version: 0.1.0

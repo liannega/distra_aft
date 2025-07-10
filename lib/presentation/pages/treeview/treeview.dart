@@ -1,6 +1,6 @@
 
-import 'package:distra_aft/config/utils/custom_context.dart';
-import 'package:distra_aft/presentation/providers/user/user_permissions_provider.dart';
+import 'package:dsimcaf_1/config/utils/custom_context.dart';
+import 'package:dsimcaf_1/presentation/providers/user/user_permissions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

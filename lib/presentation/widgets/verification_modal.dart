@@ -1,5 +1,5 @@
 
-import 'package:distra_aft/config/themes/app_theme.dart';
+import 'package:dsimcaf_1/config/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class VerificationOption {

@@ -1,12 +1,13 @@
-import 'package:distra_aft/presentation/pages/areas/areas.dart';
-import 'package:distra_aft/presentation/pages/assets/assets_page.dart';
-import 'package:distra_aft/presentation/pages/configuracion/configuracion_screen.dart';
-import 'package:distra_aft/presentation/pages/locations/locations_page.dart';
-import 'package:distra_aft/presentation/pages/login_page.dart';
-import 'package:distra_aft/presentation/pages/reponsable/responsable_screen.dart';
-import 'package:distra_aft/presentation/pages/tools/tools_page.dart';
-import 'package:distra_aft/presentation/pages/treeview/treeview.dart';
-import 'package:distra_aft/presentation/pages/verificafion/verificacion_page.dart';
+
+import 'package:dsimcaf_1/presentation/pages/areas/areas.dart';
+import 'package:dsimcaf_1/presentation/pages/assets/assets_page.dart';
+import 'package:dsimcaf_1/presentation/pages/configuracion/configuracion_screen.dart';
+import 'package:dsimcaf_1/presentation/pages/locations/locations_page.dart';
+import 'package:dsimcaf_1/presentation/pages/login_page.dart';
+import 'package:dsimcaf_1/presentation/pages/reponsable/responsable_screen.dart';
+import 'package:dsimcaf_1/presentation/pages/tools/tools_page.dart';
+import 'package:dsimcaf_1/presentation/pages/treeview/treeview.dart';
+import 'package:dsimcaf_1/presentation/pages/verificafion/verificacion_page.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(

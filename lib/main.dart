@@ -1,5 +1,6 @@
-import 'package:distra_aft/config/router/app_router.dart';
-import 'package:distra_aft/config/themes/app_theme.dart';
+
+import 'package:dsimcaf_1/config/router/app_router.dart';
+import 'package:dsimcaf_1/config/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

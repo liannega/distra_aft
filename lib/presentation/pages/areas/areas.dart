@@ -1,7 +1,7 @@
 
-import 'package:distra_aft/config/utils/custom_context.dart';
-import 'package:distra_aft/presentation/widgets/app_drawer.dart';
-import 'package:distra_aft/presentation/widgets/search_dialog.dart';
+import 'package:dsimcaf_1/config/utils/custom_context.dart';
+import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
+import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
