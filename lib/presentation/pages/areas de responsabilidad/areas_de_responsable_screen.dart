@@ -1,20 +1,21 @@
-
 import 'package:dsimcaf_1/config/utils/custom_context.dart';
 import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
 import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ToolsPage extends StatefulWidget {
-  const ToolsPage({super.key});
+class AreasDeResponsabilidadPage extends StatefulWidget {
+  const AreasDeResponsabilidadPage({super.key});
 
   @override
-  State<ToolsPage> createState() => _ToolsPageState();
+  State<AreasDeResponsabilidadPage> createState() =>
+      _AreasDeResponsabilidadPageState();
 }
 
-class _ToolsPageState extends State<ToolsPage> {
+class _AreasDeResponsabilidadPageState
+    extends State<AreasDeResponsabilidadPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final int _toolsCount = 892;
+  final int _responsibleCount = 156;
   String _searchQuery = '';
 
   void _handleSearch(String query) {
@@ -35,14 +36,14 @@ class _ToolsPageState extends State<ToolsPage> {
       canPop: false,
       onPopInvoked: (didPop) {
         if (!didPop) {
-          context.go('/verification'); // Ir a página principal
+          context.go('/verification');
         }
       },
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: context.background,
         appBar: SearchAppBar(
-          title: 'Útiles y Herramientas',
+          title: 'Áreas de responasbilidad',
           onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
           onSearch: _handleSearch,
           onSearchClear: _clearSearch,
@@ -52,7 +53,6 @@ class _ToolsPageState extends State<ToolsPage> {
         body: Column(
           children: [
             const SizedBox(height: 16),
-            // Contador de herramientas
             Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -60,11 +60,11 @@ class _ToolsPageState extends State<ToolsPage> {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF795548),
+                  color: const Color(0xFF3F51B5),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(
-                  '$_toolsCount herramientas',
+                  '$_responsibleCount responsables',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -75,16 +75,15 @@ class _ToolsPageState extends State<ToolsPage> {
             ),
             const SizedBox(height: 24),
 
-            // Lista de herramientas (simulada)
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: 30, // Datos de ejemplo
+                itemCount: 25,
                 itemBuilder: (context, index) {
-                  final toolName = 'Herramienta #${1000 + index}';
+                  final responsableName = 'Áreas ${index + 1}';
                   final shouldShow =
                       _searchQuery.isEmpty ||
-                      toolName.toLowerCase().contains(
+                      responsableName.toLowerCase().contains(
                         _searchQuery.toLowerCase(),
                       );
 
@@ -96,21 +95,17 @@ class _ToolsPageState extends State<ToolsPage> {
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: const Color(
-                          0xFF795548,
+                          0xFF3F51B5,
                         ).withOpacity(0.2),
                         child: const Icon(
-                          Icons.build,
-                          color: Color(0xFF795548),
+                          Icons.people,
+                          color: Color(0xFF3F51B5),
                         ),
                       ),
-                      title: Text(toolName),
-                      subtitle: Text(
-                        'Descripción de la herramienta ${index + 1}',
-                      ),
+                      title: Text(responsableName),
+                      subtitle: Text('Áreas de responsabilidad ${index + 1}'),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                      onTap: () {
-                        // Acción al seleccionar una herramienta
-                      },
+                      onTap: () {},
                     ),
                   );
                 },

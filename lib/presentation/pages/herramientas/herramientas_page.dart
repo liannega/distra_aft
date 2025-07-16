@@ -1,20 +1,19 @@
-
 import 'package:dsimcaf_1/config/utils/custom_context.dart';
 import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
 import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class LocationsPage extends StatefulWidget {
-  const LocationsPage({super.key});
+class ToolsPage extends StatefulWidget {
+  const ToolsPage({super.key});
 
   @override
-  State<LocationsPage> createState() => _LocationsPageState();
+  State<ToolsPage> createState() => _ToolsPageState();
 }
 
-class _LocationsPageState extends State<LocationsPage> {
+class _ToolsPageState extends State<ToolsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final int _locationsCount = 48;
+  final int _toolsCount = 892;
   String _searchQuery = '';
 
   void _handleSearch(String query) {
@@ -35,14 +34,14 @@ class _LocationsPageState extends State<LocationsPage> {
       canPop: false,
       onPopInvoked: (didPop) {
         if (!didPop) {
-          context.go('/verification'); // Ir a página principal
+          context.go('/verification');
         }
       },
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: context.background,
         appBar: SearchAppBar(
-          title: 'Ubicaciones',
+          title: 'Útiles y Herramientas',
           onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
           onSearch: _handleSearch,
           onSearchClear: _clearSearch,
@@ -52,6 +51,7 @@ class _LocationsPageState extends State<LocationsPage> {
         body: Column(
           children: [
             const SizedBox(height: 16),
+            // Contador de herramientas
             Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -59,11 +59,11 @@ class _LocationsPageState extends State<LocationsPage> {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF009688),
+                  color: const Color(0xFF795548),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(
-                  '$_locationsCount ubicaciones',
+                  '$_toolsCount herramientas',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -77,12 +77,12 @@ class _LocationsPageState extends State<LocationsPage> {
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: 20,
+                itemCount: 30, // Datos de ejemplo
                 itemBuilder: (context, index) {
-                  final locationName = 'Ubicación ${index + 1}';
+                  final toolName = 'Herramienta #${1000 + index}';
                   final shouldShow =
                       _searchQuery.isEmpty ||
-                      locationName.toLowerCase().contains(
+                      toolName.toLowerCase().contains(
                         _searchQuery.toLowerCase(),
                       );
 
@@ -94,19 +94,19 @@ class _LocationsPageState extends State<LocationsPage> {
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: const Color(
-                          0xFF009688,
+                          0xFF795548,
                         ).withOpacity(0.2),
                         child: const Icon(
-                          Icons.location_on,
-                          color: Color(0xFF009688),
+                          Icons.build,
+                          color: Color(0xFF795548),
                         ),
                       ),
-                      title: Text(locationName),
-                      subtitle: Text('Dirección de la ubicación ${index + 1}'),
+                      title: Text(toolName),
+                      subtitle: Text(
+                        'Descripción de la herramienta ${index + 1}',
+                      ),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                      onTap: () {
-                        // Acción al seleccionar una ubicación
-                      },
+                      onTap: () {},
                     ),
                   );
                 },

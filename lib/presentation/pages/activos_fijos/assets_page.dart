@@ -1,20 +1,19 @@
-
 import 'package:dsimcaf_1/config/utils/custom_context.dart';
 import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
 import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AreasPage extends StatefulWidget {
-  const AreasPage({super.key});
+class AssetsPage extends StatefulWidget {
+  const AssetsPage({super.key});
 
   @override
-  State<AreasPage> createState() => _AreasPageState();
+  State<AssetsPage> createState() => _AssetsPageState();
 }
 
-class _AreasPageState extends State<AreasPage> {
+class _AssetsPageState extends State<AssetsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final int _areasCount = 25;
+  final int _assetsCount = 14499;
   String _searchQuery = '';
 
   void _handleSearch(String query) {
@@ -35,14 +34,14 @@ class _AreasPageState extends State<AreasPage> {
       canPop: false,
       onPopInvoked: (didPop) {
         if (!didPop) {
-          context.go('/verification'); // Ir a página principal
+          context.go('/verification');
         }
       },
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: context.background,
         appBar: SearchAppBar(
-          title: 'Áreas',
+          title: 'Activos fijos',
           onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
           onSearch: _handleSearch,
           onSearchClear: _clearSearch,
@@ -52,7 +51,7 @@ class _AreasPageState extends State<AreasPage> {
         body: Column(
           children: [
             const SizedBox(height: 16),
-            // Contador de áreas
+            // Contador de activos
             Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -60,31 +59,30 @@ class _AreasPageState extends State<AreasPage> {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE91E63),
+                  color: const Color(0xFFFFB74D),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(
-                  '$_areasCount áreas registradas',
+                  '$_assetsCount activos fijos',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.black87,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 24),
 
-            // Lista de áreas (simulada)
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: 15, // Datos de ejemplo
+                itemCount: 20, // Datos de ejemplo
                 itemBuilder: (context, index) {
-                  final areaName = 'Área ${index + 1}';
+                  final assetName = 'Activo #${1000 + index}';
                   final shouldShow =
                       _searchQuery.isEmpty ||
-                      areaName.toLowerCase().contains(
+                      assetName.toLowerCase().contains(
                         _searchQuery.toLowerCase(),
                       );
 
@@ -95,20 +93,13 @@ class _AreasPageState extends State<AreasPage> {
                     elevation: 2,
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: const Color(
-                          0xFFE91E63,
-                        ).withOpacity(0.2),
-                        child: const Icon(
-                          Icons.local_offer,
-                          color: Color(0xFFE91E63),
-                        ),
+                        backgroundColor: context.primary.withOpacity(0.2),
+                        child: Icon(Icons.laptop, color: context.primary),
                       ),
-                      title: Text(areaName),
-                      subtitle: Text('Descripción del área ${index + 1}'),
+                      title: Text(assetName),
+                      subtitle: const Text('Descripción del activo'),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                      onTap: () {
-                        // Acción al seleccionar un área
-                      },
+                      onTap: () {},
                     ),
                   );
                 },

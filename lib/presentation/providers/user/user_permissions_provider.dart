@@ -201,7 +201,6 @@ class UserProfiles {
   }
 }
 
-// Notifier para manejar los permisos del usuario
 class UserPermissionsNotifier extends StateNotifier<UserPermissions?> {
   UserPermissionsNotifier() : super(null);
 

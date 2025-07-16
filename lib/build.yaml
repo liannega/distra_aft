@@ -1,0 +1,11 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Creates `toJson()` method
+          create_to_json: true
+          # Creates `fromJson()` constructor
+          create_from_json: true
+          # Generates nullable-aware code
+          nullable: true

@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Colores principales de la aplicación
-  static const Color primaryColor = Color(0xFF2196F3); // Azul
-  static const Color secondaryColor = Color(0xFF1E3A8A); // Azul marino
-  static const Color accentColor = Color(0xFFFF9800); // Naranja
-  static const Color greenColor = Color(0xFF10B981); // Verde
-  static const Color backgroundColor = Color(0xFFF5F5F5); // Gris claro
+  static const Color primaryColor = Color(0xFF2196F3);
+  static const Color secondaryColor = Color(0xFF1E3A8A);
+  static const Color accentColor = Color(0xFFFF9800);
+  static const Color greenColor = Color(0xFF10B981);
+  static const Color backgroundColor = Color(0xFFF5F5F5);
 
   // Colores para las tarjetas de verificación
-  static const Color areaCardColor = Color(0xFFFFD6D6); // Rosa claro
-  static const Color locationCardColor = Color(0xFFD6EAFF); // Azul claro
-  static const Color responsibleCardColor = Color(0xFFE8FFD6); // Verde claro
-  static const Color custodianCardColor = Color(0xFFFFE8D6); // Naranja claro
-  static const Color customCardColor = Color(0xFFE0E0E0); // Gris
+  static const Color areaCardColor = Color.fromARGB(255, 250, 190, 190);
+  static const Color locationCardColor = Color(0xFFD6EAFF);
+  static const Color responsibleCardColor = Color.fromARGB(255, 208, 246, 180);
+  static const Color custodianCardColor = Color.fromARGB(255, 245, 210, 184);
+  static const Color customCardColor = Color(0xFFE0E0E0);
 
   static ThemeData get lightTheme {
     return ThemeData(

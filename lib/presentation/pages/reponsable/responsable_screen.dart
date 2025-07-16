@@ -35,7 +35,7 @@ class _ResponsablePageState extends State<ResponsablePage> {
       canPop: false,
       onPopInvoked: (didPop) {
         if (!didPop) {
-          context.go('/verification'); // Ir a página principal
+          context.go('/verification');
         }
       },
       child: Scaffold(

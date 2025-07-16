@@ -10,112 +10,196 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 60, 16, 20),
-            color: Colors.grey[100],
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'DSiMCAF 2',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                  ),
-                ),
-                const Text(
-                  'Verificador de Activos',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 24),
-                Row(
+            height: 200,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFFFF8A50), Color(0xFFFF6B35)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundColor: Colors.grey[600],
-                      child: const Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 28,
+                    // Logo/Título
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        'DISTRA AFT',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 1.5,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(height: 8),
                     const Text(
-                      'Invitado',
+                      'Verificador de Activos Fijos',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 14,
+                        color: Colors.white70,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    const Spacer(),
+
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: CircleAvatar(
+                            radius: 22,
+                            backgroundColor: const Color(0xFFFF6B35),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Invitado',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'Modo invitado',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
+
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
+            child: Container(
+              color: const Color(0xFFFAFAFA),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const SizedBox(height: 8),
+
+                  _buildSectionHeader('Activos fijos', Icons.business_center),
+                  _buildDrawerItem(
+                    context,
+                    Icons.verified_outlined,
+                    'Verificaciones',
+                    const Color(0xFF4CAF50),
+                    () => context.go('/verification'),
+                  ),
+                  _buildDrawerItem(
+                    context,
+                    Icons.laptop_outlined,
+                    'Activos fijos',
+                    const Color(0xFF2196F3),
+                    () => context.go('/assets'),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  _buildSectionHeader(
+                    'Útiles y herramientas',
+                    Icons.build_circle,
+                  ),
+                  _buildDrawerItem(
+                    context,
+                    Icons.verified_outlined,
+                    'Verificaciones',
+                    const Color(0xFF4CAF50),
+                    () => context.go('/verification'),
+                  ),
+                  _buildDrawerItem(
+                    context,
+                    Icons.construction_outlined,
+                    'Útiles y herramientas',
+                    const Color(0xFFFF9800),
+                    () => context.go('/tools'),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  _buildSectionHeader('Generales', Icons.dashboard),
+                  _buildDrawerItem(
+                    context,
+                    Icons.location_on_outlined,
+                    'Áreas de responsabilidad',
+                    const Color(0xFF9C27B0),
+                    () => context.go('/responsabilidad'),
+                  ),
+                  _buildDrawerItem(
+                    context,
+                    Icons.people_outline,
+                    'Responsables',
+                    const Color(0xFF607D8B),
+                    () => context.go('/responsible'),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  _buildSectionHeader('Configuración', Icons.settings),
+                  _buildDrawerItem(
+                    context,
+                    Icons.settings_outlined,
+                    'Configuración',
+                    const Color(0xFF795548),
+                    () => context.go('/configuration'),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(top: BorderSide(color: Colors.grey.shade200)),
+            ),
+            child: Row(
               children: [
-                // Activos fijos
-                _buildSectionHeader(context, 'Activos fijos'),
-                _buildDrawerItem(
-                  context,
-                  Icons.verified,
-                  'Verificaciones',
-                  () => context.go('/verification'),
+                Icon(Icons.info_outline, size: 16, color: Colors.grey[600]),
+                const SizedBox(width: 8),
+                Text(
+                  'Versión 1.0.0',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
-                _buildDrawerItem(
-                  context,
-                  Icons.laptop,
-                  'Activos fijos',
-                  () => context.go('/assets'),
-                ),
-                _buildDrawerItem(
-                  context,
-                  Icons.local_offer,
-                  'Áreas',
-                  () => context.go('/areas'),
-                ),
-                _buildDrawerItem(
-                  context,
-                  Icons.location_on,
-                  'Ubicaciones',
-                  () => context.go('/locations'),
-                ),
-                _buildDrawerItem(
-                  context,
-                  Icons.people,
-                  'Responsables',
-                  () => context.go('/responsible'),
-                ),
-
-                _buildSectionHeader(context, 'Útiles y herramientas'),
-                _buildDrawerItem(
-                  context,
-                  Icons.verified,
-                  'Verificaciones',
-                  () => context.go('/verification'),
-                ),
-                _buildDrawerItem(
-                  context,
-                  Icons.build,
-                  'Útiles y herramientas',
-                  () => context.go('/tools'),
-                ),
-                _buildDrawerItem(
-                  context,
-                  Icons.people,
-                  'Responsables',
-                  () => context.go('/responsible'),
-                ),
-
-                _buildSectionHeader(context, 'Misceláneas'),
-                _buildDrawerItem(
-                  context,
-                  Icons.settings,
-                  'Configuración',
-                  () => context.go('/configuration'),
-                ),
+                const Spacer(),
+                Icon(Icons.help_outline, size: 16, color: Colors.grey[600]),
               ],
             ),
           ),
@@ -124,16 +208,24 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title) {
+  Widget _buildSectionHeader(String title, IconData icon) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.grey[600],
-          fontWeight: FontWeight.w500,
-        ),
+      margin: const EdgeInsets.only(top: 8, bottom: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: const Color(0xFF666666)),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Color(0xFF666666),
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -142,19 +234,53 @@ class AppDrawer extends StatelessWidget {
     BuildContext context,
     IconData icon,
     String title,
+    Color iconColor,
     VoidCallback onTap,
   ) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.black87, size: 24),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+            onTap();
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: iconColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 20),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF2C3E50),
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                  color: Colors.grey[400],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-      onTap: () {
-        Navigator.pop(context);
-        onTap();
-      },
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
   }
 }

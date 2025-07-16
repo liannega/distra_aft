@@ -1,6 +1,5 @@
-
-import 'package:dsimcaf_1/config/themes/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'custom_count_modal.dart';
 
 class VerificationOption {
   final String title;
@@ -21,61 +20,49 @@ class VerificationModal extends StatelessWidget {
 
   const VerificationModal({super.key, required this.onClose});
 
+  void _showCustomCountModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder:
+          (context) => CustomCountModal(onClose: () => Navigator.pop(context)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final options = [
       VerificationOption(
-        title: 'Nueva verificación por área',
-        backgroundColor: AppTheme.areaCardColor,
-        icon: Image.asset('assets/images/verification.png', height: 80),
+        title: 'Nuevo conteo general',
+        backgroundColor: const Color(0xFFE8F5E8), // AppTheme.areaCardColor
+        icon: Image.asset('assets/images/verification.png', height: 55),
         onTap: () {
           Navigator.pop(context);
           // Implementar acción
         },
       ),
+
       VerificationOption(
-        title: 'Nueva verificación por ubicación',
-        backgroundColor: AppTheme.locationCardColor,
-        icon: Image.asset(
-          'assets/images/verification.png',
-          height: 80,
-        ),
+        title: 'Nuevo conteo parcial mensual',
+        backgroundColor: const Color(
+          0xFFE3F2FD,
+        ), // AppTheme.responsibleCardColor
+        icon: Image.asset('assets/images/buscar.png', height: 55),
         onTap: () {
           Navigator.pop(context);
           // Implementar acción
         },
       ),
+
       VerificationOption(
-        title: 'Nueva verificación por responsable',
-        backgroundColor: AppTheme.responsibleCardColor,
-        icon: Image.asset(
-          'assets/images/verification.png',
-          height: 80,
-        ),
+        title: 'Nuevo conteo parcial por:',
+        backgroundColor: const Color(0xFFF3E5F5), // AppTheme.customCardColor
+        icon: Image.asset('assets/images/note.png', height: 55),
         onTap: () {
           Navigator.pop(context);
-          // Implementar acción
-        },
-      ),
-      VerificationOption(
-        title: 'Nueva verificación por custodio',
-        backgroundColor: AppTheme.custodianCardColor,
-        icon: Image.asset(
-          'assets/images/verification.png',
-          height: 80,
-        ),
-        onTap: () {
-          Navigator.pop(context);
-          // Implementar acción
-        },
-      ),
-      VerificationOption(
-        title: 'Nueva verificación personalizada',
-        backgroundColor: AppTheme.customCardColor,
-        icon: Image.asset('assets/images/verification.png', height: 80),
-        onTap: () {
-          Navigator.pop(context);
-          // Implementar acción
+          // Mostrar el modal personalizado
+          _showCustomCountModal(context);
         },
       ),
     ];
@@ -94,26 +81,32 @@ class VerificationModal extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(
+                top: 16.0,
+                left: 16.0,
+                right: 16.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Nueva verificación',
+                    'Adicionar conteo',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, size: 28),
+                    icon: const Icon(Icons.close_rounded, size: 24),
                     onPressed: onClose,
                   ),
                 ],
               ),
             ),
-            const Divider(height: 1),
+
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                  decelerationRate: ScrollDecelerationRate.normal,
+                ),
                 itemCount: options.length,
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 itemBuilder: (context, index) {
