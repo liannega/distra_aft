@@ -23,6 +23,7 @@ class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.additionalActions,
     this.onScanOption,
   });
+  //prueba
 
   @override
   State<SearchAppBar> createState() => _SearchAppBarState();
