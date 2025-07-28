@@ -12,6 +12,7 @@ class ApiConfigurationState {
   const ApiConfigurationState({
     this.configuration,
     this.isLoading = false,
+    //prueba
     this.error,
   });
 
