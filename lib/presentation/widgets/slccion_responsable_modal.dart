@@ -1,26 +1,49 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dsimcaf_1/presentation/providers/verification_provider.dart';
 
-class SeleccionAreaModal extends ConsumerStatefulWidget {
-  final Function(Map<String, dynamic>) onAreaSeleccionada;
+class SeleccionResponsableModal extends StatefulWidget {
+  final Function(Map<String, dynamic>) onResponsableSeleccionado;
   final VoidCallback onClose;
 
-  const SeleccionAreaModal({
+  const SeleccionResponsableModal({
     super.key,
-    required this.onAreaSeleccionada,
+    required this.onResponsableSeleccionado,
     required this.onClose,
   });
 
   @override
-  ConsumerState<SeleccionAreaModal> createState() => _SeleccionAreaModalState();
+  State<SeleccionResponsableModal> createState() =>
+      _SeleccionResponsableModalState();
 }
 
-class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
+class _SeleccionResponsableModalState extends State<SeleccionResponsableModal> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+
+  final List<Map<String, dynamic>> _responsables = [
+    {
+      'id': '1',
+      'name': 'Yoendrys Angel Ugando Lavin',
+      'position': 'Jefe de Área',
+      'totalAssets': 45,
+      'areas': ['AIRES ACONDICIONADOS INSTALACIONES', 'MANTENIMIENTO GENERAL'],
+    },
+    {
+      'id': '2',
+      'name': 'Vidalina Virgen Orozco Rodríguez',
+      'position': 'Supervisora',
+      'totalAssets': 120,
+      'areas': ['TEATRO ZONA 5 INFRAESTRUCTURA'],
+    },
+    {
+      'id': '3',
+      'name': 'Maritza Sotto Oduardo',
+      'position': 'Especialista Técnico',
+      'totalAssets': 26,
+      'areas': ['OFICINA DE ESPECIALISTAS TÉCNICOS'],
+    },
+  ];
 
   @override
   void dispose() {
@@ -30,13 +53,16 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
 
   @override
   Widget build(BuildContext context) {
-    final areas = ref.watch(areasProvider);
-    final filteredAreas = areas.where((area) {
-      if (_searchQuery.isEmpty) return true;
-      return area.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          area.code.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          area.responsible.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
+    final filteredResponsables =
+        _responsables.where((responsable) {
+          if (_searchQuery.isEmpty) return true;
+          return responsable['name'].toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              ) ||
+              responsable['position'].toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              );
+        }).toList();
 
     return Material(
       color: Colors.transparent,
@@ -51,7 +77,6 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -62,7 +87,7 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
                   ),
                   const Expanded(
                     child: Text(
-                      'Seleccionar área de responsabilidad',
+                      'Seleccionar responsable de área',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -73,13 +98,12 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
               ),
             ),
 
-            // Buscador
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: 'Buscar área...',
+                  hintText: 'Buscar responsable...',
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -102,24 +126,18 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
 
             const SizedBox(height: 16),
 
-            // Lista de áreas
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: filteredAreas.length,
+                itemCount: filteredResponsables.length,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemBuilder: (context, index) {
-                  final area = filteredAreas[index];
+                  final responsable = filteredResponsables[index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
-                      onTap: () => widget.onAreaSeleccionada({
-                        'id': area.id,
-                        'name': area.name,
-                        'code': area.code,
-                        'responsible': area.responsible,
-                        'assetsCount': area.assetsCount,
-                      }),
+                      onTap:
+                          () => widget.onResponsableSeleccionado(responsable),
                       borderRadius: BorderRadius.circular(12),
                       child: Container(
                         padding: const EdgeInsets.all(16),
@@ -134,48 +152,54 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
                             ),
                           ],
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
                           children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    '${area.code} - ${area.name}',
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundColor: Colors.blue.withOpacity(0.1),
+                              child: const Icon(
+                                Icons.person,
+                                color: Colors.blue,
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    responsable['name'],
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87,
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    responsable['position'],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[600],
+                                    ),
                                   ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    '${area.assetsCount} medios',
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${responsable['totalAssets']} medios asignados',
                                     style: const TextStyle(
-                                      color: Colors.white,
                                       fontSize: 12,
+                                      color: Colors.orange,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              area.responsible,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[700],
+                                ],
                               ),
+                            ),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.grey,
                             ),
                           ],
                         ),

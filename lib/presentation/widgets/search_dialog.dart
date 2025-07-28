@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -40,6 +42,7 @@ class _SearchAppBarState extends State<SearchAppBar>
   late AnimationController _animationController;
   late AnimationController _filterAnimationController;
   late Animation<double> _filterRotationAnimation;
+  // ignore: unused_field
   late Animation<Offset> _filterSlideAnimation;
 
   Timer? _debounceTimer;

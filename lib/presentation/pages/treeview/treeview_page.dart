@@ -1,4 +1,6 @@
 
+// ignore_for_file: deprecated_member_use
+
 import 'package:dsimcaf_1/config/utils/custom_context.dart';
 import 'package:dsimcaf_1/presentation/providers/user/user_permissions_provider.dart';
 import 'package:flutter/material.dart';

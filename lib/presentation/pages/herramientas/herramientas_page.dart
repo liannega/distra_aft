@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:dsimcaf_1/config/utils/custom_context.dart';
 import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
 import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
@@ -80,6 +82,7 @@ class _ToolsPageState extends State<ToolsPage> {
                 itemCount: 30, // Datos de ejemplo
                 itemBuilder: (context, index) {
                   final toolName = 'Herramienta #${1000 + index}';
+                  final toolId = 'tool_${1000 + index}';
                   final shouldShow =
                       _searchQuery.isEmpty ||
                       toolName.toLowerCase().contains(
@@ -106,7 +109,7 @@ class _ToolsPageState extends State<ToolsPage> {
                         'Descripción de la herramienta ${index + 1}',
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                      onTap: () {},
+                      onTap: () => context.push('/asset-detail/$toolId'),
                     ),
                   );
                 },

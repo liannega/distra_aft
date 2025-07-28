@@ -39,7 +39,12 @@ class VerificationModal extends StatelessWidget {
         icon: Image.asset('assets/images/verification.png', height: 55),
         onTap: () {
           Navigator.pop(context);
-          // Implementar acción
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Función: Conteo General - En desarrollo'),
+              backgroundColor: Colors.blue,
+            ),
+          );
         },
       ),
 
@@ -51,13 +56,18 @@ class VerificationModal extends StatelessWidget {
         icon: Image.asset('assets/images/buscar.png', height: 55),
         onTap: () {
           Navigator.pop(context);
-          // Implementar acción
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Función: Conteo Parcial Mensual - En desarrollo'),
+              backgroundColor: Colors.orange,
+            ),
+          );
         },
       ),
 
       VerificationOption(
         title: 'Nuevo conteo parcial por:',
-        backgroundColor: const Color(0xFFF3E5F5), // AppTheme.customCardColor
+        backgroundColor: const Color(0xFFF3E5F5),
         icon: Image.asset('assets/images/note.png', height: 55),
         onTap: () {
           Navigator.pop(context);

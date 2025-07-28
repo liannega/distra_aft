@@ -263,7 +263,7 @@ class _DistraLoginPageState extends ConsumerState<DistraLoginPage> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(height: 150),
+              const SizedBox(height: 80),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:dsimcaf_1/config/utils/custom_context.dart';
 import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
 import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';

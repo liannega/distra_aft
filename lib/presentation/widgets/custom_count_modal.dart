@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 class CustomCountOption {
@@ -31,7 +33,12 @@ class CustomCountModal extends StatelessWidget {
         color: const Color(0xFF4CAF50),
         onTap: () {
           Navigator.pop(context);
-          // Implementar acción para área de responsabilidad
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Función: Conteo por Área - En desarrollo'),
+              backgroundColor: Colors.green,
+            ),
+          );
         },
       ),
       CustomCountOption(
@@ -41,7 +48,12 @@ class CustomCountModal extends StatelessWidget {
         color: const Color(0xFF2196F3),
         onTap: () {
           Navigator.pop(context);
-          // Implementar acción para responsable
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Función: Conteo por Responsable - En desarrollo'),
+              backgroundColor: Colors.blue,
+            ),
+          );
         },
       ),
       CustomCountOption(
@@ -51,7 +63,12 @@ class CustomCountModal extends StatelessWidget {
         color: const Color(0xFFFF9800),
         onTap: () {
           Navigator.pop(context);
-          // Implementar acción para custodio
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Función: Conteo por Custodio - En desarrollo'),
+              backgroundColor: Colors.orange,
+            ),
+          );
         },
       ),
     ];
