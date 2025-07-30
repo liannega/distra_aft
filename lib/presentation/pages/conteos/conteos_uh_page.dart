@@ -1,10 +1,11 @@
 // ignore_for_file: deprecated_member_use, unused_field
 
-import 'package:dsimcaf_1/presentation/widgets/new_count_modal.dart';
-import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
+import 'package:dsimcaf_1/presentation/shared/new_count_modal.dart';
+import 'package:dsimcaf_1/presentation/shared/search_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
+import 'package:dsimcaf_1/presentation/shared/app_drawer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ConteosUHPage extends ConsumerStatefulWidget {
   const ConteosUHPage({super.key});
@@ -23,7 +24,7 @@ class _ConteosUHPageState extends ConsumerState<ConteosUHPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.index = 1; // "En proceso" por defecto
+    _tabController.index = 0;
   }
 
   @override
@@ -70,9 +71,8 @@ class _ConteosUHPageState extends ConsumerState<ConteosUHPage>
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        if (!didPop) {
-          Navigator.of(context).pop();
-        }
+        if (didPop) return;
+       GoRouter.of(context).go('/verification');
       },
       child: Scaffold(
         key: _scaffoldKey,
@@ -128,21 +128,33 @@ class _ConteosUHPageState extends ConsumerState<ConteosUHPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildEmptyState('Planificados', Icons.schedule, const Color(0xFF8B5CF6)),
-                  _buildEmptyState('En proceso', Icons.hourglass_empty, const Color(0xFF3B82F6)),
-                  _buildEmptyState('Terminados', Icons.check_circle, const Color(0xFF10B981)),
+                  _buildEmptyState(
+                    'Planificados',
+                    Icons.schedule,
+                    const Color(0xFF8B5CF6),
+                  ),
+                  _buildEmptyState(
+                    'En proceso',
+                    Icons.hourglass_empty,
+                    const Color(0xFF3B82F6),
+                  ),
+                  _buildEmptyState(
+                    'Terminados',
+                    Icons.check_circle,
+                    const Color(0xFF10B981),
+                  ),
                 ],
               ),
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: _showNuevoConteoModal,
-          backgroundColor: const Color(0xFFFF9800),
-          foregroundColor: Colors.white,
-          icon: const Icon(Icons.add),
-          label: const Text('Adicionar conteo'),
-        ),
+        // floatingActionButton: FloatingActionButton.extended(
+        //   onPressed: _showNuevoConteoModal,
+        //   backgroundColor: const Color(0xFFFF9800),
+        //   foregroundColor: Colors.white,
+        //   icon: const Icon(Icons.add),
+        //   label: const Text('Adicionar conteo'),
+        // ),
       ),
     );
   }
@@ -190,7 +202,9 @@ class _ConteosUHPageState extends ConsumerState<ConteosUHPage>
               backgroundColor: accentColor,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             icon: const Icon(Icons.add),
             label: const Text('Crear nuevo conteo UH'),

@@ -3,16 +3,16 @@ import 'package:dsimcaf_1/presentation/pages/areas%20de%20responsabilidad/areas_
 import 'package:dsimcaf_1/presentation/pages/area_detail/area_detail_page.dart';
 import 'package:dsimcaf_1/presentation/pages/assets_detail/assets_datail_page.dart';
 import 'package:dsimcaf_1/presentation/pages/configuracion/config_page.dart';
-import 'package:dsimcaf_1/presentation/pages/conteos/conteos_aft_page.dart';
 import 'package:dsimcaf_1/presentation/pages/conteos/conteos_uh_page.dart';
 import 'package:dsimcaf_1/presentation/pages/login/login_page.dart';
 import 'package:dsimcaf_1/presentation/pages/reponsable/responsable_screen.dart';
 import 'package:dsimcaf_1/presentation/pages/responsable_detail/responsable_detail_page.dart';
-import 'package:dsimcaf_1/presentation/pages/submayor/subamyor_page.dart';
+import 'package:dsimcaf_1/presentation/pages/submayor-aft/subamyor_aft_page.dart';
 import 'package:dsimcaf_1/presentation/pages/submayor_uh/submayor_uh_page.dart';
 import 'package:dsimcaf_1/presentation/pages/treeview/treeview_page.dart';
+import 'package:dsimcaf_1/presentation/pages/verificafion/verification_page.dart';
 import 'package:dsimcaf_1/presentation/pages/verification_detail/verification_detail_page.dart';
-import 'package:dsimcaf_1/presentation/pages/sync/sync_page.dart';
+import 'package:dsimcaf_1/presentation/pages/configuracion/sync/sync_page.dart';
 import 'package:dsimcaf_1/presentation/providers/user/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -46,10 +46,14 @@ final appRouter = GoRouter(
       name: 'treeview',
       builder: (context, state) => const TreeViewPage(),
     ),
-    GoRoute(
-      path: '/verification',
-      name: 'conteos',
-      builder: (context, state) => const ConteosPage(),
+    // GoRoute(
+    //   path: '/verification',
+    //   name: 'conteos',
+    //   builder: (context, state) => const ConteosPage(),
+    // ),
+    GoRoute(path: '/verification',
+      name: 'verification',
+      builder: (context, state) => const VerificationPage(),
     ),
     GoRoute(
       path: '/conteos-uh',

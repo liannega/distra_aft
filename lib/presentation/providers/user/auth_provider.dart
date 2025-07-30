@@ -1,7 +1,11 @@
-import 'package:dsimcaf_1/data/datasourse/api.dart';
-import 'package:dsimcaf_1/data/models/auth_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dsimcaf_1/config/constants/shared_prefs_key.dart';
+import 'package:dsimcaf_1/domain/entities/distra_entitie.dart';
+import 'package:dsimcaf_1/domain/repositories/usecases/auth_repository.dart';
 import 'package:dsimcaf_1/presentation/providers/api_configuration_provider.dart';
+import 'package:dsimcaf_1/presentation/providers/data/api_provider.dart';
 
 class AuthState {
   final bool isAuthenticated;
@@ -20,17 +24,17 @@ class AuthState {
 
   AuthState copyWith({
     bool? isAuthenticated,
-    DistraUser? user,
-    String? token,
+    ValueGetter<DistraUser?>? user,
+    ValueGetter<String?>? token,
     bool? isLoading,
-    String? error,
+    ValueGetter<String?>? error,
   }) {
     return AuthState(
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      user: user ?? this.user,
-      token: token ?? this.token,
+      user: user != null ? user() : this.user,
+      token: token != null ? token() : this.token,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      error: error != null ? error() : this.error,
     );
   }
 }
@@ -38,7 +42,9 @@ class AuthState {
 class AuthNotifier extends StateNotifier<AuthState> {
   final Ref ref;
 
-  AuthNotifier(this.ref) : super(const AuthState()) {
+  final AuthRepository _authRepository;
+
+  AuthNotifier(this.ref, this._authRepository) : super(const AuthState()) {
     _loadStoredAuth();
   }
 
@@ -47,20 +53,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
     if (apiConfig == null) return;
 
     try {
-      final authRepository = ref.read(
-        authRepositoryProvider(apiConfig.baseUrl),
-      );
-      final token = await authRepository.getStoredToken();
-      final user = await authRepository.getStoredUser();
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(SharedPrefsKey.authTokenKey);
+      DistraUser? user;
+      try {
+        user = DistraUser.fromJson(
+          prefs.getString(SharedPrefsKey.currentUserDataKey)!,
+        );
+      } on Exception catch (_) {}
 
       if (token != null && user != null) {
-        final isValid = await authRepository.validateToken(token);
-
-        if (isValid) {
-          state = AuthState(isAuthenticated: true, user: user, token: token);
-        } else {
-          await authRepository.clearAuthData();
-        }
+        state = state.copyWith(
+          isAuthenticated: true,
+          user: () => user,
+          token: () => token,
+        );
+      } else {
+        state = state.copyWith(
+          isAuthenticated: false,
+          user: () => null,
+          token: () => null,
+        );
+        await _authRepository.clearAuthData();
       }
     } catch (e) {
       // Error al cargar, mantener estado inicial
@@ -74,41 +88,34 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final apiConfig = ref.read(apiConfigurationProvider).configuration;
-      if (apiConfig == null) {
-        throw Exception('Configuración del API no encontrada');
+      final res = await _authRepository.login(username, password);
+
+      if (res.isOkAndDataNotNull) {
+        state = state.copyWith(
+          isLoading: false,
+          isAuthenticated: true,
+          user: () => res.data!.user,
+          token: () => res.data!.token,
+        );
+      } else {
+        state = state.copyWith(isLoading: false, error: () => res.message);
       }
-
-      final loginUseCase = ref.read(loginUseCaseProvider(apiConfig.baseUrl));
-      final authResponse = await loginUseCase.call(username, password);
-
-      state = AuthState(
-        isAuthenticated: true,
-        user: authResponse.user,
-        token: authResponse.token,
-      );
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString().replaceAll('Exception: ', ''),
-      );
+      state = state.copyWith(isLoading: false, error: () => e.toString());
     }
   }
 
   Future<void> logout() async {
     final apiConfig = ref.read(apiConfigurationProvider).configuration;
     if (apiConfig != null) {
-      final authRepository = ref.read(
-        authRepositoryProvider(apiConfig.baseUrl),
-      );
-      await authRepository.clearAuthData();
+      await _authRepository.clearAuthData();
     }
     state = const AuthState();
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
-  (ref) => AuthNotifier(ref),
+  (ref) => AuthNotifier(ref, ref.read(apiProvider).authRepository),
 );
 
 final isAuthenticatedProvider = Provider<bool>((ref) {

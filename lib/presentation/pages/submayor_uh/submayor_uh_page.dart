@@ -1,70 +1,26 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:dsimcaf_1/config/utils/custom_context.dart';
-import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
-import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
+import 'package:dsimcaf_1/domain/entities/activo_fijo.dart';
+import 'package:dsimcaf_1/presentation/providers/submayor_uh/submayor_uh_provider.dart';
+import 'package:dsimcaf_1/presentation/shared/app_drawer.dart';
+import 'package:dsimcaf_1/presentation/shared/search_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class SubmayorUHPage extends StatefulWidget {
+class SubmayorUHPage extends ConsumerStatefulWidget {
   const SubmayorUHPage({super.key});
 
   @override
-  State<SubmayorUHPage> createState() => _SubmayorUHPageState();
+  ConsumerState<SubmayorUHPage> createState() => _SubmayorUHPageState();
 }
 
-class _SubmayorUHPageState extends State<SubmayorUHPage> {
+class _SubmayorUHPageState extends ConsumerState<SubmayorUHPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final int _totalUH = 892;
+  int totalUH = 0;
   String _searchQuery = '';
   String _criterioAgrupacion = 'area';
-
-  final List<Map<String, dynamic>> _uhList = [
-    {
-      'id': 'uh_001',
-      'denominacion': 'ESCALERA PROFESIONAL ALUMINIO',
-      'codigoProducto': '3740000012345',
-      'codigoProveedor': 'PROV001',
-      'areaResponsabilidad': 'MANTENIMIENTO GENERAL',
-      'responsableArea': 'Carlos Mendoza Pérez',
-      'custodio': 'Técnico Juan Pérez',
-      'cantidad': 3,
-      'estadoTecnico': '(3) Bueno en explotación',
-    },
-    {
-      'id': 'uh_002',
-      'denominacion': 'TALADRO ELÉCTRICO BOSCH',
-      'codigoProducto': '3740000012346',
-      'codigoProveedor': 'PROV002',
-      'areaResponsabilidad': 'MANTENIMIENTO GENERAL',
-      'responsableArea': 'Carlos Mendoza Pérez',
-      'custodio': 'Técnico María López',
-      'cantidad': 2,
-      'estadoTecnico': '(2) Bueno en explotación',
-    },
-    {
-      'id': 'uh_003',
-      'denominacion': 'MARTILLO NEUMÁTICO INDUSTRIAL',
-      'codigoProducto': '3740000012347',
-      'codigoProveedor': 'PROV003',
-      'areaResponsabilidad': 'AIRES ACONDICIONADOS INSTALACIONES',
-      'responsableArea': 'Yoendrys Angel Ugando Lavin',
-      'custodio': 'Técnico Carlos Ruiz',
-      'cantidad': 1,
-      'estadoTecnico': '(1) Regular en explotación',
-    },
-    {
-      'id': 'uh_004',
-      'denominacion': 'DESTORNILLADOR SET PROFESIONAL',
-      'codigoProducto': '3740000012348',
-      'codigoProveedor': 'PROV001',
-      'areaResponsabilidad': 'OFICINA DE ESPECIALISTAS TÉCNICOS',
-      'responsableArea': 'Maritza Sotto Oduardo',
-      'custodio': 'Técnico Ana García',
-      'cantidad': 5,
-      'estadoTecnico': '(4) Bueno en explotación, (1) Regular en explotación',
-    },
-  ];
 
   void _handleSearch(String query) {
     setState(() {
@@ -78,32 +34,28 @@ class _SubmayorUHPageState extends State<SubmayorUHPage> {
     });
   }
 
-  List<Map<String, dynamic>> get _filteredUH {
-    return _uhList.where((uh) {
+  List<ActivoFijo> _filteredUH(List<ActivoFijo> activosFijos) {
+    return activosFijos.where((uh) {
       if (_searchQuery.isEmpty) return true;
-      return uh['denominacion'].toLowerCase().contains(
+      return uh.denominacion.toLowerCase().contains(
             _searchQuery.toLowerCase(),
           ) ||
-          uh['codigoProducto'].toLowerCase().contains(
+          uh.nroinventario.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          uh.arearesponsabilidad.toLowerCase().contains(
             _searchQuery.toLowerCase(),
           ) ||
-          uh['areaResponsabilidad'].toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          ) ||
-          uh['responsableArea'].toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+          uh.responsable.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
   }
 
-  Map<String, List<Map<String, dynamic>>> get _groupedUH {
-    final grouped = <String, List<Map<String, dynamic>>>{};
+  Map<String, List<ActivoFijo>> _groupedUH(List<ActivoFijo> activosFijos) {
+    final grouped = <String, List<ActivoFijo>>{};
 
-    for (final uh in _filteredUH) {
+    for (final uh in activosFijos) {
       final key =
           _criterioAgrupacion == 'area'
-              ? uh['areaResponsabilidad']
-              : uh['responsableArea'];
+              ? uh.arearesponsabilidad
+              : uh.responsable;
 
       if (!grouped.containsKey(key)) {
         grouped[key] = [];
@@ -116,136 +68,157 @@ class _SubmayorUHPageState extends State<SubmayorUHPage> {
 
   @override
   Widget build(BuildContext context) {
-    final groupedUH = _groupedUH;
-    final filteredCount = _filteredUH.length;
+    final submayorUHState = ref.watch(submayorUHProvider);
 
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (!didPop) {
-          context.go('/conteos-uh');
-        }
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: context.background,
-        appBar: SearchAppBar(
-          title: 'Submayor de UH',
-          onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-          onSearch: _handleSearch,
-          onSearchClear: _clearSearch,
-          hasDrawer: true,
-          additionalActions: [
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.group_work, color: Colors.orange),
-              onSelected: (value) {
-                setState(() {
-                  _criterioAgrupacion = value;
-                });
-              },
-              itemBuilder:
-                  (context) => [
-                    const PopupMenuItem(
-                      value: 'area',
-                      child: Row(
-                        children: [
-                          Icon(Icons.location_on, size: 20),
-                          SizedBox(width: 8),
-                          Text('Agrupar por área'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'responsable',
-                      child: Row(
-                        children: [
-                          Icon(Icons.person, size: 20),
-                          SizedBox(width: 8),
-                          Text('Agrupar por responsable'),
-                        ],
-                      ),
-                    ),
-                  ],
-            ),
-          ],
-        ),
-        drawer: const AppDrawer(),
-        body: Column(
-          children: [
-            const SizedBox(height: 16),
+    final activosFijosFiltrados = _filteredUH(submayorUHState.activosFijos);
+    final groupedUH = _groupedUH(activosFijosFiltrados);
+    final filteredCount = activosFijosFiltrados.length;
+    totalUH = submayorUHState.activosFijos.length;
 
-            Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF9800),
-                  borderRadius: BorderRadius.circular(30),
-                ),
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: const Color(0xFFF9FAFB),
+      appBar: SearchAppBar(
+        title: 'Submayor de UH',
+        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        onSearch: _handleSearch,
+        onSearchClear: _clearSearch,
+        hasDrawer: true,
+        additionalActions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.tune, color: Colors.orange),
+            onSelected: (value) => setState(() => _criterioAgrupacion = value),
+            itemBuilder:
+                (context) => [
+                  const PopupMenuItem(
+                    value: 'area',
+                    child: Row(
+                      children: [
+                        Icon(Icons.location_on, size: 20),
+                        SizedBox(width: 8),
+                        Text('Agrupar por área'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'responsable',
+                    child: Row(
+                      children: [
+                        Icon(Icons.person, size: 20),
+                        SizedBox(width: 8),
+                        Text('Agrupar por responsable'),
+                      ],
+                    ),
+                  ),
+                ],
+          ),
+        ],
+      ),
+      drawer: const AppDrawer(),
+      body: Column(
+        children: [
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.orange.shade100,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Center(
                 child: Text(
                   _searchQuery.isEmpty
-                      ? 'Total de medios: $_totalUH'
-                      : 'Mostrando $filteredCount de $_totalUH medios',
+                      ? 'Total de medios: $totalUH'
+                      : 'Mostrando $filteredCount de $totalUH medios',
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
                   ),
                 ),
               ),
             ),
-
-            const SizedBox(height: 24),
-
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: groupedUH.keys.length,
-                itemBuilder: (context, index) {
-                  final groupKey = groupedUH.keys.elementAt(index);
-                  final groupItems = groupedUH[groupKey]!;
-
-                  return _buildGroupSection(groupKey, groupItems);
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child:
+                submayorUHState.isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : submayorUHState.error != null &&
+                        submayorUHState.error!.isNotEmpty
+                    ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            submayorUHState.error!,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          FilledButton(
+                            onPressed: () {
+                              ref
+                                  .read(submayorUHProvider.notifier)
+                                  .loadActivosFijos();
+                            },
+                            child: Text('Volver a cargar'),
+                          ),
+                        ],
+                      ),
+                    )
+                    : groupedUH.isEmpty
+                    ? Center(
+                      child: Text(
+                        'No se encontraron activos fijos',
+                        style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: groupedUH.keys.length,
+                      itemBuilder: (context, index) {
+                        final groupKey = groupedUH.keys.elementAt(index);
+                        final groupItems = groupedUH[groupKey]!;
+                        return _buildGroupSection(
+                          groupKey,
+                          groupItems,
+                        ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.1);
+                      },
+                    ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildGroupSection(
-    String groupTitle,
-    List<Map<String, dynamic>> items,
-  ) {
+  Widget _buildGroupSection(String groupTitle, List<ActivoFijo> items) {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header del grupo
           Container(
-            width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.1),
+              color: Colors.orange.withOpacity(0.08),
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
             child: Row(
@@ -263,7 +236,7 @@ class _SubmayorUHPageState extends State<SubmayorUHPage> {
                     groupTitle,
                     style: const TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
                       color: Colors.orange,
                     ),
                   ),
@@ -289,32 +262,35 @@ class _SubmayorUHPageState extends State<SubmayorUHPage> {
               ],
             ),
           ),
-
           ...items.map((uh) => _buildUHItem(uh)),
         ],
       ),
     );
   }
 
-  Widget _buildUHItem(Map<String, dynamic> uh) {
+  Widget _buildUHItem(ActivoFijo uh) {
     return InkWell(
-      onTap: () => context.push('/asset-detail/${uh['id']}'),
+      onTap: () => context.push('/asset-detail/${uh.idregnumerico}'),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: Color(0xFFE5E7EB), width: 0.5),
+            bottom: BorderSide(color: Color(0xFFE0E0E0), width: 0.5),
           ),
         ),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                color: Colors.orange.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.build, color: Colors.orange, size: 20),
+              child: const Icon(
+                Icons.build_circle,
+                color: Colors.orange,
+                size: 22,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -322,7 +298,7 @@ class _SubmayorUHPageState extends State<SubmayorUHPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    uh['denominacion'],
+                    uh.denominacion,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -331,54 +307,19 @@ class _SubmayorUHPageState extends State<SubmayorUHPage> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Row(
-                    
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          uh['codigoProducto'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'Cant: ${uh['cantidad']}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                      _buildBadge(uh.idregnumerico, Colors.blue),
+                      // const SizedBox(width: 8),
+                      // _buildBadge('Cant: ${uh['cantidad']}', Colors.green),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
                     _criterioAgrupacion == 'area'
-                        ? uh['responsableArea']
-                        : uh['areaResponsabilidad'],
+                        ? uh.responsable
+                        : uh.arearesponsabilidad,
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -388,6 +329,24 @@ class _SubmayorUHPageState extends State<SubmayorUHPage> {
             ),
             const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBadge(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

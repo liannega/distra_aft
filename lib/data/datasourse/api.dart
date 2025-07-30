@@ -1,79 +1,33 @@
-import 'package:dio/dio.dart';
-import 'package:dsimcaf_1/data/datasourse/remote.dart';
-import 'package:dsimcaf_1/data/local/shared_preferends.dart';
-import 'package:dsimcaf_1/data/repositories/api_repository_impl.dart';
-import 'package:dsimcaf_1/data/repositories/auth_repository_impl.dart';
-import 'package:dsimcaf_1/domain/entities/usecases/login_usecase.dart';
-import 'package:dsimcaf_1/domain/entities/usecases/save_api_usecase.dart';
-import 'package:dsimcaf_1/domain/repositories/api_repository.dart';
-import 'package:dsimcaf_1/domain/repositories/auth_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:dsimcaf_1/data/datasourse/usecases/activo_fijo_api.dart';
+import 'package:dsimcaf_1/data/datasourse/usecases/auth_api.dart';
+import 'package:dsimcaf_1/data/myDio/my_dio.dart';
+import 'package:dsimcaf_1/domain/repositories/remote_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/usecases/activo_fijo_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/usecases/auth_repository.dart';
 
-// Dio Provider
-final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio();
+class Api extends RemoteRepository {
 
-  dio.interceptors.add(
-    PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-    ),
-  );
+  static final RemoteRepository _instace = Api._();
+  late MyDio _myDio;
 
-  return dio;
-});
+  static RemoteRepository getInstance() => _instace;
 
-final sharedPreferencesDataSourceProvider =
-    Provider<SharedPreferencesDataSource>((ref) {
-      return SharedPreferencesDataSource();
-    });
+  //* usecases
+  late AuthApi _authApi;
+  late ActivoFijoApi _activoFijoApi;
 
-final distraApiDataSourceProvider = Provider<DistraApiDataSource>((ref) {
-  final dio = ref.watch(dioProvider);
-  return DistraApiDataSource(dio);
-});
+  Api._() {
+    _myDio = MyDio();
 
-final apiConfigurationRepositoryProvider = Provider<ApiConfigurationRepository>(
-  (ref) {
-    final localDataSource = ref.watch(sharedPreferencesDataSourceProvider);
-    final remoteDataSource = ref.watch(distraApiDataSourceProvider);
+    //* usecases
+    _authApi = AuthApi(_myDio);
+    _activoFijoApi = ActivoFijoApi(_myDio);
+  }
 
-    return ApiConfigurationRepositoryImpl(
-      localDataSource: localDataSource,
-      remoteDataSource: remoteDataSource,
-    );
-  },
-);
+  @override
+  ActivoRepository get activoRepository => _activoFijoApi;
 
-final authRepositoryProvider = Provider.family<AuthRepository, String>((
-  ref,
-  baseUrl,
-) {
-  final localDataSource = ref.watch(sharedPreferencesDataSourceProvider);
-  final remoteDataSource = ref.watch(distraApiDataSourceProvider);
 
-  return AuthRepositoryImpl(
-    localDataSource: localDataSource,
-    remoteDataSource: remoteDataSource,
-    baseUrl: baseUrl,
-  );
-});
-
-final saveApiConfigurationUseCaseProvider =
-    Provider<SaveApiConfigurationUseCase>((ref) {
-      final repository = ref.watch(apiConfigurationRepositoryProvider);
-      return SaveApiConfigurationUseCase(repository);
-    });
-
-final loginUseCaseProvider = Provider.family<LoginUseCase, String>((
-  ref,
-  baseUrl,
-) {
-  final repository = ref.watch(authRepositoryProvider(baseUrl));
-  return LoginUseCase(repository);
-});
+  @override
+  AuthRepository get authRepository => _authApi;
+}

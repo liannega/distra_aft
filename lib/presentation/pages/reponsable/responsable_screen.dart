@@ -1,8 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:dsimcaf_1/config/utils/custom_context.dart';
-import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
-import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
+import 'package:dsimcaf_1/presentation/shared/app_drawer.dart';
+import 'package:dsimcaf_1/presentation/shared/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -87,7 +87,7 @@ class _ResponsablesPageState extends State<ResponsablesPage> {
       canPop: false,
       onPopInvoked: (didPop) {
         if (!didPop) {
-          context.go('/conteos');
+          context.go('/verification');
         }
       },
       child: Scaffold(

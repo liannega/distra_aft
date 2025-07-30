@@ -1,9 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:dsimcaf_1/presentation/widgets/search_dialog.dart';
-import 'package:dsimcaf_1/presentation/widgets/verification_modal.dart';
+import 'package:dsimcaf_1/presentation/shared/new_count_modal.dart';
+import 'package:dsimcaf_1/presentation/shared/search_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
+import 'package:dsimcaf_1/presentation/shared/app_drawer.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -41,7 +41,10 @@ class _VerificationPageState extends State<VerificationPage>
           minChildSize: 0.5,
           maxChildSize: 0.95,
           builder: (_, scrollController) {
-            return VerificationModal(onClose: () => Navigator.pop(context));
+            return NuevoConteoModal(
+              onClose: () => Navigator.pop(context),
+              tipoMedio: '',
+            );
           },
         );
       },
@@ -107,7 +110,7 @@ class _VerificationPageState extends State<VerificationPage>
       key: _scaffoldKey,
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: SearchAppBar(
-        title: 'Verificaciones',
+        title: 'Conteos',
         onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
         onSearch: _handleSearch,
         onSearchClear: _clearSearch,
@@ -342,7 +345,6 @@ class _VerificationPageState extends State<VerificationPage>
 
           const SizedBox(height: 32),
 
-          // Botón de acción (solo si no hay búsqueda)
           if (_searchQuery.isEmpty)
             Container(
               decoration: BoxDecoration(
@@ -371,7 +373,7 @@ class _VerificationPageState extends State<VerificationPage>
                 ),
                 icon: const Icon(Icons.add, size: 20),
                 label: const Text(
-                  'Crear nueva verificación',
+                  'Crear nuevo conteo',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),

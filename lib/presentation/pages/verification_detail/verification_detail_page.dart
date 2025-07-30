@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:dsimcaf_1/data/models/verification_model.dart';
+import 'package:dsimcaf_1/domain/entities/verification_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

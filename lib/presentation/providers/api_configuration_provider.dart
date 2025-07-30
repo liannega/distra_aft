@@ -1,8 +1,7 @@
-import 'package:dsimcaf_1/data/datasourse/api.dart';
-import 'package:dsimcaf_1/domain/entities/api_entitie.dart';
-import 'package:dsimcaf_1/domain/entities/usecases/save_api_usecase.dart';
-import 'package:dsimcaf_1/domain/repositories/api_repository.dart';
+import 'package:dsimcaf_1/config/constants/shared_prefs_key.dart';
+import 'package:dsimcaf_1/domain/entities/api_configuration_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiConfigurationState {
   final ApiConfiguration? configuration;
@@ -31,18 +30,21 @@ class ApiConfigurationState {
 }
 
 class ApiConfigurationNotifier extends StateNotifier<ApiConfigurationState> {
-  final SaveApiConfigurationUseCase _saveConfigurationUseCase;
-  final ApiConfigurationRepository _repository;
-
-  ApiConfigurationNotifier(this._saveConfigurationUseCase, this._repository)
-    : super(const ApiConfigurationState()) {
+  ApiConfigurationNotifier() : super(const ApiConfigurationState()) {
     _loadConfiguration();
   }
 
   Future<void> _loadConfiguration() async {
     try {
-      final configuration = await _repository.getConfiguration();
-      state = state.copyWith(configuration: configuration);
+      final prefs = await SharedPreferences.getInstance();
+      ApiConfiguration? configuration;
+      final configString = prefs.getString(SharedPrefsKey.apiConfigKey);
+      if (configString != null) {
+        configuration = ApiConfiguration.fromJson(configString);
+      }
+      if (configuration != null) {
+        state = state.copyWith(configuration: configuration);
+      }
     } catch (e) {
       state = state.copyWith(error: e.toString());
     }
@@ -56,25 +58,27 @@ class ApiConfigurationNotifier extends StateNotifier<ApiConfigurationState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      await _saveConfigurationUseCase.call(
-        baseUrl: baseUrl,
-        apiUsername: apiUsername,
-        apiPassword: apiPassword,
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        SharedPrefsKey.apiConfigKey,
+        ApiConfiguration(
+          baseUrl: baseUrl,
+          apiUsername: apiUsername,
+          apiPassword: apiPassword,
+          createdAt: DateTime.now(),
+        ).toJson(),
       );
-
       await _loadConfiguration();
       state = state.copyWith(isLoading: false);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString().replaceAll('Exception: ', ''),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
   Future<void> clearConfiguration() async {
     try {
-      await _repository.clearConfiguration();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(SharedPrefsKey.apiConfigKey);
       state = state.copyWith(configuration: null);
     } catch (e) {
       state = state.copyWith(error: e.toString());
@@ -86,12 +90,7 @@ final apiConfigurationProvider =
     StateNotifierProvider<ApiConfigurationNotifier, ApiConfigurationState>((
       ref,
     ) {
-      final saveConfigurationUseCase = ref.watch(
-        saveApiConfigurationUseCaseProvider,
-      );
-      final repository = ref.watch(apiConfigurationRepositoryProvider);
-
-      return ApiConfigurationNotifier(saveConfigurationUseCase, repository);
+      return ApiConfigurationNotifier();
     });
 
 final isApiConfiguredProvider = Provider<bool>((ref) {

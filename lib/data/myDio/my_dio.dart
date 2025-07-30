@@ -22,7 +22,7 @@ enum APIVersion {
 
 class MyDio {
   late Dio _dio;
-  final String baseUrl = '';
+  final String baseUrl = 'https://api.distra.cu/api/';
   final String token =
       '';
 

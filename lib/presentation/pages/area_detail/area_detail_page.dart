@@ -11,7 +11,6 @@ class AreaDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Datos estáticos del área
     final area = {
       'id': areaId,
       'code': '60103',
@@ -49,7 +48,6 @@ class AreaDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Tarjeta principal del área
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -124,7 +122,6 @@ class AreaDetailPage extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Estadísticas rápidas
             Row(
               children: [
                 Expanded(
@@ -149,7 +146,6 @@ class AreaDetailPage extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Información organizacional
             _buildInfoSection(
               'Información Organizacional',
               Icons.business,
@@ -163,7 +159,6 @@ class AreaDetailPage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Información del responsable
             _buildInfoSection(
               'Responsable del Área',
               Icons.person,

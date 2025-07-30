@@ -1,4 +1,4 @@
-import 'package:dsimcaf_1/data/models/auth_model.dart';
+import 'package:dsimcaf_1/domain/entities/distra_entitie.dart';
 
 class AuthResponse {
   final String token;

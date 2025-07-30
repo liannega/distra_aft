@@ -31,12 +31,15 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
   @override
   Widget build(BuildContext context) {
     final areas = ref.watch(areasProvider);
-    final filteredAreas = areas.where((area) {
-      if (_searchQuery.isEmpty) return true;
-      return area.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          area.code.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          area.responsible.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
+    final filteredAreas =
+        areas.where((area) {
+          if (_searchQuery.isEmpty) return true;
+          return area.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              area.code.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              area.responsible.toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              );
+        }).toList();
 
     return Material(
       color: Colors.transparent,
@@ -113,13 +116,14 @@ class _SeleccionAreaModalState extends ConsumerState<SeleccionAreaModal> {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
-                      onTap: () => widget.onAreaSeleccionada({
-                        'id': area.id,
-                        'name': area.name,
-                        'code': area.code,
-                        'responsible': area.responsible,
-                        'assetsCount': area.assetsCount,
-                      }),
+                      onTap:
+                          () => widget.onAreaSeleccionada({
+                            'id': area.id,
+                            'name': area.name,
+                            'code': area.code,
+                            'responsible': area.responsible,
+                            'assetsCount': area.assetsCount,
+                          }),
                       borderRadius: BorderRadius.circular(12),
                       child: Container(
                         padding: const EdgeInsets.all(16),

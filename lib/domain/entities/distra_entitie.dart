@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class DistraUser {
   final int id;
   final String name;
@@ -40,4 +42,19 @@ class DistraUser {
       isActive: isActive ?? this.isActive,
     );
   }
+
+  factory DistraUser.fromMap(Map<String, dynamic> map) {
+    return DistraUser(
+      id: map['id']?.toInt() ?? 0,
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
+      emailVerifiedAt: map['email_verified_at'],
+      createdAt: map['created_at'] ?? '',
+      updatedAt: map['updated_at'] ?? '',
+      accessLevel: map['access_level']?.toInt() ?? 0,
+      isActive: map['is_active']?.toInt() ?? 0,
+    );
+  }
+
+  factory DistraUser.fromJson(String source) => DistraUser.fromMap(json.decode(source));
 }

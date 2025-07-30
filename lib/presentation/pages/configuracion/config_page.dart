@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dsimcaf_1/presentation/widgets/app_drawer.dart';
+import 'package:dsimcaf_1/presentation/shared/app_drawer.dart';
 
 class ConfiguracionesPage extends StatefulWidget {
   const ConfiguracionesPage({super.key});

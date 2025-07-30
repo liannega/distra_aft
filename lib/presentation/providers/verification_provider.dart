@@ -1,7 +1,6 @@
-import 'package:dsimcaf_1/data/models/verification_model.dart';
+import 'package:dsimcaf_1/domain/entities/verification_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Datos simulados
 class MockData {
   static List<Area> get areas => [
     const Area(
