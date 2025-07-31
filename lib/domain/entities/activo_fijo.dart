@@ -22,4 +22,9 @@ class ActivoFijo {
     required this.grupo,
     required this.estadooperacion,
   });
+  // Getter: ¿Es AFT?
+  bool get esAFT => grupo == 'AFT';
+
+  // Getter: ¿Es UH?
+  bool get esUH => grupo == 'UH';
 }

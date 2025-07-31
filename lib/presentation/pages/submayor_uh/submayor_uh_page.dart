@@ -75,122 +75,132 @@ class _SubmayorUHPageState extends ConsumerState<SubmayorUHPage> {
     final filteredCount = activosFijosFiltrados.length;
     totalUH = submayorUHState.activosFijos.length;
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF9FAFB),
-      appBar: SearchAppBar(
-        title: 'Submayor de UH',
-        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        onSearch: _handleSearch,
-        onSearchClear: _clearSearch,
-        hasDrawer: true,
-        additionalActions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.tune, color: Colors.orange),
-            onSelected: (value) => setState(() => _criterioAgrupacion = value),
-            itemBuilder:
-                (context) => [
-                  const PopupMenuItem(
-                    value: 'area',
-                    child: Row(
-                      children: [
-                        Icon(Icons.location_on, size: 20),
-                        SizedBox(width: 8),
-                        Text('Agrupar por área'),
-                      ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) context.go('/verification');
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: const Color(0xFFF9FAFB),
+        appBar: SearchAppBar(
+          title: 'Submayor de UH',
+          onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+          onSearch: _handleSearch,
+          onSearchClear: _clearSearch,
+          hasDrawer: true,
+          additionalActions: [
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.tune, color: Colors.orange),
+              onSelected:
+                  (value) => setState(() => _criterioAgrupacion = value),
+              itemBuilder:
+                  (context) => [
+                    const PopupMenuItem(
+                      value: 'area',
+                      child: Row(
+                        children: [
+                          Icon(Icons.location_on, size: 20),
+                          SizedBox(width: 8),
+                          Text('Agrupar por área'),
+                        ],
+                      ),
                     ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'responsable',
-                    child: Row(
-                      children: [
-                        Icon(Icons.person, size: 20),
-                        SizedBox(width: 8),
-                        Text('Agrupar por responsable'),
-                      ],
+                    const PopupMenuItem(
+                      value: 'responsable',
+                      child: Row(
+                        children: [
+                          Icon(Icons.person, size: 20),
+                          SizedBox(width: 8),
+                          Text('Agrupar por responsable'),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-          ),
-        ],
-      ),
-      drawer: const AppDrawer(),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.orange.shade100,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Center(
-                child: Text(
-                  _searchQuery.isEmpty
-                      ? 'Total de medios: $totalUH'
-                      : 'Mostrando $filteredCount de $totalUH medios',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                  ],
+            ),
+          ],
+        ),
+        drawer: const AppDrawer(),
+        body: Column(
+          children: [
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade100,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Center(
+                  child: Text(
+                    _searchQuery.isEmpty
+                        ? 'Total de medios: $totalUH'
+                        : 'Mostrando $filteredCount de $totalUH medios',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child:
-                submayorUHState.isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : submayorUHState.error != null &&
-                        submayorUHState.error!.isNotEmpty
-                    ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            submayorUHState.error!,
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+            const SizedBox(height: 16),
+            Expanded(
+              child:
+                  submayorUHState.isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : submayorUHState.error != null &&
+                          submayorUHState.error!.isNotEmpty
+                      ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              submayorUHState.error!,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
+                            FilledButton(
+                              onPressed: () {
+                                ref
+                                    .read(submayorUHProvider.notifier)
+                                    .loadActivosFijos();
+                              },
+                              child: Text('Volver a cargar'),
+                            ),
+                          ],
+                        ),
+                      )
+                      : groupedUH.isEmpty
+                      ? Center(
+                        child: Text(
+                          'No se encontraron activos fijos',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 16,
                           ),
-                          FilledButton(
-                            onPressed: () {
-                              ref
-                                  .read(submayorUHProvider.notifier)
-                                  .loadActivosFijos();
-                            },
-                            child: Text('Volver a cargar'),
-                          ),
-                        ],
+                        ),
+                      )
+                      : ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: groupedUH.keys.length,
+                        itemBuilder: (context, index) {
+                          final groupKey = groupedUH.keys.elementAt(index);
+                          final groupItems = groupedUH[groupKey]!;
+                          return _buildGroupSection(groupKey, groupItems)
+                              .animate()
+                              .fadeIn(duration: 300.ms)
+                              .slideY(begin: 0.1);
+                        },
                       ),
-                    )
-                    : groupedUH.isEmpty
-                    ? Center(
-                      child: Text(
-                        'No se encontraron activos fijos',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 16),
-                      ),
-                    )
-                    : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: groupedUH.keys.length,
-                      itemBuilder: (context, index) {
-                        final groupKey = groupedUH.keys.elementAt(index);
-                        final groupItems = groupedUH[groupKey]!;
-                        return _buildGroupSection(
-                          groupKey,
-                          groupItems,
-                        ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.1);
-                      },
-                    ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

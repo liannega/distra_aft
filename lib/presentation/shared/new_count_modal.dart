@@ -161,8 +161,8 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
             tipoMedio: widget.tipoMedio,
             criterios: criterios,
             onConfirmar: () {
-              Navigator.pop(context); // Cerrar confirmación
-              widget.onClose(); // Cerrar modal principal
+              Navigator.pop(context);
+              widget.onClose();
               _iniciarConteo(criterios);
             },
             onCancelar: () => Navigator.pop(context),
@@ -213,8 +213,6 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-
-            // Header
             Padding(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -280,7 +278,7 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
                     'personalizado',
                     'Parcial personalizado',
                     'Conteo sobre criterios definidos por el usuario',
-                    Icons.tune,
+                    Icons.person_outline,
                     const Color(0xFF10B981),
                   ),
                 ],

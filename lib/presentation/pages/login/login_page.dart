@@ -26,7 +26,6 @@ class _DistraLoginPageState extends ConsumerState<DistraLoginPage> {
 
   void _handleLogin({bool isGuest = false}) async {
     if (isGuest) {
-      // Usar el sistema de permisos local para invitado
       ref.read(userPermissionsProvider.notifier).setUserFromLogin('invitado');
       context.go('/treeview');
     } else {
@@ -121,10 +120,8 @@ class _DistraLoginPageState extends ConsumerState<DistraLoginPage> {
     final authState = ref.watch(authProvider);
     final apiConfigState = ref.watch(apiConfigurationProvider);
 
-    // Escuchar cambios en el estado de autenticación
     ref.listen<AuthState>(authProvider, (previous, next) {
       if (next.isAuthenticated) {
-        // Si se autentica con DISTRA, ir directo a verificaciones
         context.go('/verification');
       } else if (next.error != null) {
         _showError(next.error!);

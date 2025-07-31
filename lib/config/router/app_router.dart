@@ -10,7 +10,7 @@ import 'package:dsimcaf_1/presentation/pages/responsable_detail/responsable_deta
 import 'package:dsimcaf_1/presentation/pages/submayor-aft/subamyor_aft_page.dart';
 import 'package:dsimcaf_1/presentation/pages/submayor_uh/submayor_uh_page.dart';
 import 'package:dsimcaf_1/presentation/pages/treeview/treeview_page.dart';
-import 'package:dsimcaf_1/presentation/pages/verificafion/verification_page.dart';
+import 'package:dsimcaf_1/presentation/pages/conteos/conteos_aft_page.dart';
 import 'package:dsimcaf_1/presentation/pages/verification_detail/verification_detail_page.dart';
 import 'package:dsimcaf_1/presentation/pages/configuracion/sync/sync_page.dart';
 import 'package:dsimcaf_1/presentation/providers/user/auth_provider.dart';
@@ -51,15 +51,21 @@ final appRouter = GoRouter(
     //   name: 'conteos',
     //   builder: (context, state) => const ConteosPage(),
     // ),
-    GoRoute(path: '/verification',
+    GoRoute(
+      path: '/verification',
       name: 'verification',
-      builder: (context, state) => const VerificationPage(),
+      builder: (context, state) => const ConteoAFTPage(),
     ),
     GoRoute(
       path: '/conteos-uh',
       name: 'conteos-uh',
-      builder: (context, state) => const ConteosUHPage(),
+      builder: (context, state) => const ConteoUHPage(),
     ),
+    // GoRoute(
+    //   path: '/conteos-uh',
+    //   name: 'conteos-uh',
+    //   builder: (context, state) => const ConteosUHPage(),
+    // ),
     GoRoute(
       path: '/submayor-aft',
       name: 'submayor-aft',
