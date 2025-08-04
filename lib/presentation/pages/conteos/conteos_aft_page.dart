@@ -31,7 +31,7 @@ class _ConteoAFTPageState extends State<ConteoAFTPage>
     super.dispose();
   }
 
-  void _showVerificationModal() {
+  void showVerificationModal() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -393,7 +393,7 @@ class _ConteoAFTPageState extends State<ConteoAFTPage>
                 ],
               ),
               child: ElevatedButton.icon(
-                onPressed: _showVerificationModal,
+                onPressed: showVerificationModal,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: accentColor,
                   foregroundColor: Colors.white,

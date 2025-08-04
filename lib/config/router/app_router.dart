@@ -1,5 +1,5 @@
 import 'package:dsimcaf_1/presentation/pages/api_configuration/api_configuration_page.dart';
-import 'package:dsimcaf_1/presentation/pages/areas%20de%20responsabilidad/areas_de_responsable_screen.dart';
+import 'package:dsimcaf_1/presentation/pages/areas%20de%20responsabilidad/areas_de_responsable_page.dart';
 import 'package:dsimcaf_1/presentation/pages/area_detail/area_detail_page.dart';
 import 'package:dsimcaf_1/presentation/pages/assets_detail/assets_datail_page.dart';
 import 'package:dsimcaf_1/presentation/pages/configuracion/config_page.dart';

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NuevoConteoModal extends ConsumerStatefulWidget {
-  final String tipoMedio; // 'AFT' o 'UH'
+  final String tipoMedio;
   final VoidCallback onClose;
 
   const NuevoConteoModal({
