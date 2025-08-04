@@ -184,8 +184,6 @@ class _AreasResponsabilidadPageState
             ),
 
             const SizedBox(height: 24),
-
-            // Lista de áreas
             Expanded(
               child:
                   state.isLoading
