@@ -21,7 +21,8 @@ class _AreasResponsabilidadPageState
     extends ConsumerState<AreasResponsabilidadPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _searchQuery = '';
-  String _criterioAgrupacion = 'area'; // 'area', 'responsable', 'centro_costo'
+  String _criterioAgrupacion = 'area';
+  // 'area', 'responsable', 'centro_costo'
 
   void _handleSearch(String query) {
     setState(() {
@@ -35,7 +36,6 @@ class _AreasResponsabilidadPageState
     });
   }
 
-  // Filtrar activos por búsqueda
   List<ActivoFijo> _filteredActivos(List<ActivoFijo> activos) {
     if (_searchQuery.isEmpty) return activos;
 
@@ -48,8 +48,6 @@ class _AreasResponsabilidadPageState
           af.arearesponsabilidad.toLowerCase().contains(query);
     }).toList();
   }
-
-  // Agrupar activos por criterio
   Map<String, dynamic> _groupedBy(List<ActivoFijo> activos) {
     final filtered = _filteredActivos(activos);
     final Map<String, dynamic> grouped = {};
@@ -159,7 +157,6 @@ class _AreasResponsabilidadPageState
           children: [
             const SizedBox(height: 16),
 
-            // Contador superior
             Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(

@@ -60,25 +60,6 @@ class _DistraLoginPageState extends ConsumerState<DistraLoginPage> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      title: const Text('Usuario DISTRA Real'),
-                      subtitle: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Usuario: user1'),
-                          Text('Contraseña: PassWord12345'),
-                          Text('Tipo: Autenticación API Real'),
-                        ],
-                      ),
-                      onTap: () {
-                        _userController.text = 'user1';
-                        _passwordController.text = 'PassWord12345';
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
                   ...PredefinedUsers.users.entries.map((entry) {
                     final username = entry.key;
                     final userInfo = entry.value;

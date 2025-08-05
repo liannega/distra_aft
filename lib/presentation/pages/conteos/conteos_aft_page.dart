@@ -1,19 +1,21 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animate_do/animate_do.dart';
+import 'package:dsimcaf_1/presentation/providers/conteo_aft/conteo_aft_provider.dart';
 import 'package:dsimcaf_1/presentation/shared/new_count_modal.dart';
 import 'package:dsimcaf_1/presentation/shared/search_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:dsimcaf_1/presentation/shared/app_drawer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ConteoAFTPage extends StatefulWidget {
+class ConteoAFTPage extends ConsumerStatefulWidget {
   const ConteoAFTPage({super.key});
 
   @override
-  State<ConteoAFTPage> createState() => _ConteoAFTPageState();
+  ConsumerState<ConteoAFTPage> createState() => _ConteoAFTPageState();
 }
 
-class _ConteoAFTPageState extends State<ConteoAFTPage>
+class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -107,6 +109,8 @@ class _ConteoAFTPageState extends State<ConteoAFTPage>
 
   @override
   Widget build(BuildContext context) {
+    final conteoAftState = ref.watch(conteoAftProvider);
+    print("waka conteosProceso ${conteoAftState.conteosProceso.length}");
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await showDialog<bool>(

@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field, deprecated_member_use
 
+import 'package:dsimcaf_1/presentation/providers/conteo_aft/conteo_aft_provider.dart';
 import 'package:dsimcaf_1/presentation/widgets/area_selelection.dart';
 import 'package:dsimcaf_1/presentation/widgets/confirmacion_conteo.dart';
 import 'package:dsimcaf_1/presentation/widgets/selection_custodio_modal.dart';
@@ -36,7 +37,7 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
         _mostrarConfirmacionConteo({
           'tipo': 'General',
           'descripcion':
-              'Conteo del 100% de los medios, para todas las áreas de responsabilidad',
+              '1Conteo del 100% de los medios, para todas las áreas de responsabilidad',
           'centroCosto': '101-Administración',
           'cantidadMedios': widget.tipoMedio == 'AFT' ? 14499 : 892,
         });
@@ -96,7 +97,7 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
               _mostrarConfirmacionConteo({
                 'tipo': 'Parcial personalizado por: Área de responsabilidad',
                 'descripcion':
-                    'Conteo del 100% de los medios asociados a un área de responsabilidad',
+                    '2Conteo del 100% de los medios asociados a un área de responsabilidad',
                 'area': area['name'],
                 'codigo': area['code'],
                 'cantidadMedios': area['assetsCount'],
@@ -160,8 +161,11 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
           (context) => ConfirmacionConteoModal(
             tipoMedio: widget.tipoMedio,
             criterios: criterios,
-            onConfirmar: () {
+            onConfirmar: (ref) async {
               Navigator.pop(context);
+              await ref
+                  .read(conteoAftProvider.notifier)
+                  .createNuevoConteoGeneral();
               widget.onClose();
               _iniciarConteo(criterios);
             },
@@ -261,7 +265,7 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
                   _buildOpcionConteo(
                     'general',
                     'General',
-                    'Conteo del 100% de los medios, para todas las áreas de responsabilidad',
+                    '3Conteo del 100% de los medios, para todas las áreas de responsabilidad',
                     Icons.business_center,
                     const Color(0xFF8B5CF6),
                   ),
@@ -518,7 +522,7 @@ class _NuevoConteoModalState extends ConsumerState<NuevoConteoModal> {
                   _buildCriterioPersonalizado(
                     'area',
                     'Área de responsabilidad',
-                    'Conteo del 100% de los medios asociados a un área',
+                    '4Conteo del 100% de los medios asociados a un área',
                     Icons.location_on,
                     const Color(0xFF4CAF50),
                   ),

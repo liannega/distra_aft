@@ -1,10 +1,11 @@
-import 'package:dsimcaf_1/data/models/activo_fijo_model.dart';
+
+import 'package:dsimcaf_1/data/api/models/activo_fijo_model.dart';
 import 'package:dsimcaf_1/data/myDio/custom_response.dart';
 import 'package:dsimcaf_1/data/myDio/my_dio.dart';
 import 'package:dsimcaf_1/data/placeholder/activos_placeholder.dart';
 import 'package:dsimcaf_1/data/placeholder/uh_placeholder.dart';
 import 'package:dsimcaf_1/domain/entities/activo_fijo.dart';
-import 'package:dsimcaf_1/domain/repositories/usecases/activo_fijo_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/remote/usecases/activo_fijo_repository.dart';
 
 class ActivoFijoApi extends ActivoRepository {
   final MyDio _dio;

@@ -1,4 +1,4 @@
-import 'package:dsimcaf_1/data/models/distra_user_model.dart';
+import 'package:dsimcaf_1/data/api/models/distra_user_model.dart';
 import 'package:dsimcaf_1/domain/entities/auth_entitie.dart';
 
 class AuthResponseModel {

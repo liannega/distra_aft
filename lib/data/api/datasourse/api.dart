@@ -1,9 +1,9 @@
-import 'package:dsimcaf_1/data/datasourse/usecases/activo_fijo_api.dart';
-import 'package:dsimcaf_1/data/datasourse/usecases/auth_api.dart';
+import 'package:dsimcaf_1/data/api/datasourse/usecases/activo_fijo_api.dart';
+import 'package:dsimcaf_1/data/api/datasourse/usecases/auth_api.dart';
 import 'package:dsimcaf_1/data/myDio/my_dio.dart';
-import 'package:dsimcaf_1/domain/repositories/remote_repository.dart';
-import 'package:dsimcaf_1/domain/repositories/usecases/activo_fijo_repository.dart';
-import 'package:dsimcaf_1/domain/repositories/usecases/auth_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/remote/remote_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/remote/usecases/activo_fijo_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/remote/usecases/auth_repository.dart';
 
 class Api extends RemoteRepository {
 

@@ -1,5 +1,5 @@
 import 'package:dsimcaf_1/domain/entities/activo_fijo.dart';
-import 'package:dsimcaf_1/domain/repositories/usecases/activo_fijo_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/remote/usecases/activo_fijo_repository.dart';
 import 'package:dsimcaf_1/presentation/providers/data/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
