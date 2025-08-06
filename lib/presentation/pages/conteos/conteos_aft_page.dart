@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animate_do/animate_do.dart';
+import 'package:dsimcaf_1/domain/entities/conteo.dart';
 import 'package:dsimcaf_1/presentation/providers/conteo_aft/conteo_aft_provider.dart';
+import 'package:dsimcaf_1/presentation/shared/conteo_cart.dart';
 import 'package:dsimcaf_1/presentation/shared/new_count_modal.dart';
 import 'package:dsimcaf_1/presentation/shared/search_dialog.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,10 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    _tabController.addListener(() {
+      setState(() {}); // Esto actualiza el FAB cuando cambias de pestaña
+    });
   }
 
   @override
@@ -157,10 +163,46 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
           hasDrawer: true,
         ),
         drawer: const AppDrawer(),
+        floatingActionButton: Builder(
+          builder: (context) {
+            bool isVisible = true;
+            if (_tabController.index == 0) {
+              isVisible = conteoAftState.conteosProceso.isNotEmpty;
+            } else if (_tabController.index == 1) {
+              isVisible = conteoAftState.conteosPlanificados.isNotEmpty;
+            } else if (_tabController.index == 2) {
+              isVisible = conteoAftState.conteosTerminados.isNotEmpty;
+            }
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return ScaleTransition(scale: animation, child: child);
+              },
+              child:
+                  isVisible
+                      ? FloatingActionButton(
+                        key: const ValueKey('FAB-visible'),
+                        onPressed: _handleNuevoConteo,
+                        backgroundColor: const Color(0xFF6366F1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        tooltip: 'Nuevo conteo',
+                        child: const Icon(
+                          Icons.add,
+                          size: 28,
+                          color: Colors.white,
+                        ),
+                      )
+                      : const SizedBox(key: ValueKey('FAB-hidden')),
+            );
+          },
+        ),
+
         body: Column(
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              // margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -222,24 +264,44 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildEmptyState(
-                    'En proceso',
-                    Icons.hourglass_empty,
+                  _buildConteoTab(
+                    conteoAftState.conteosProceso,
                     const Color(0xFF3B82F6),
                   ),
-                  _buildEmptyState(
-                    'Planificadas',
-                    Icons.schedule,
+                  _buildConteoTab(
+                    conteoAftState.conteosPlanificados,
                     const Color(0xFF8B5CF6),
                   ),
-                  _buildEmptyState(
-                    'Terminadas',
-                    Icons.check_circle,
+                  _buildConteoTab(
+                    conteoAftState.conteosTerminados,
                     const Color(0xFF10B981),
                   ),
                 ],
               ),
             ),
+
+            // Expanded(
+            //   child: TabBarView(
+            //     controller: _tabController,
+            //     children: [
+            //       _buildEmptyState(
+            //         'En proceso',
+            //         Icons.hourglass_empty,
+            //         const Color(0xFF3B82F6),
+            //       ),
+            //       _buildEmptyState(
+            //         'Planificadas',
+            //         Icons.schedule,
+            //         const Color(0xFF8B5CF6),
+            //       ),
+            //       _buildEmptyState(
+            //         'Terminadas',
+            //         Icons.check_circle,
+            //         const Color(0xFF10B981),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -252,7 +314,6 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Contenedor de ilustración mejorado
           Container(
             width: 280,
             height: 280,
@@ -269,7 +330,6 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
             ),
             child: Stack(
               children: [
-                // Patrón de fondo sutil
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
@@ -433,5 +493,33 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
       default:
         return 'Comienza creando tu primera verificación para ver el contenido aquí.';
     }
+  }
+
+  Widget _buildConteoTab(List<Conteo> conteos, Color accentColor) {
+    if (conteos.isEmpty) {
+      return _buildEmptyState("sin datos", Icons.search_off, accentColor);
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      itemCount: conteos.length,
+      itemBuilder: (context, index) {
+        final conteo = conteos[index];
+        return ConteoCard(conteo: conteo, color: accentColor);
+      },
+    );
+  }
+
+  void _handleNuevoConteo() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder:
+          (_) => NuevoConteoModal(
+            tipoMedio: 'AFT', // o el tipo dinámico que estés manejando
+            onClose: () {},
+          ),
+    );
   }
 }

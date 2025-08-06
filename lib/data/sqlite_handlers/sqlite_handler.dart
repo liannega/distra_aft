@@ -86,4 +86,37 @@ class SqliteHandler {
     );
     return result > 0;
   }
+
+  Future<bool> update(
+    String table,
+    Map<String, Object?> values, {
+    String? where,
+    List<Object?>? whereArgs,
+    ConflictAlgorithm? conflictAlgorithm,
+  }) async {
+    final db = await _getDb();
+    final result = await db.update(
+      table,
+      values,
+      where: where,
+      whereArgs: whereArgs,
+      conflictAlgorithm: conflictAlgorithm,
+    );
+    return result > 0;
+  }
+
+  Future<bool> delete(
+    String table, {
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
+    final db = await _getDb();
+    final result = await db.delete(table, where: where, whereArgs: whereArgs);
+    return result > 0;
+  }
+
+  Future<void> execute(String sql, [List<Object?>? arguments]) async {
+    final db = await _getDb();
+    await db.execute(sql, arguments);
+  }
 }

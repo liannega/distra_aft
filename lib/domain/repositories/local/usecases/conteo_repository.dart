@@ -5,4 +5,5 @@ abstract class ConteoRepository {
   Future<List<Conteo>> getConteosPlanificados();
   Future<List<Conteo>> getConteosTerminados();
   Future<bool> createConteoGeneral();
+  Future<bool> deleteConteo(String conteoId);
 }

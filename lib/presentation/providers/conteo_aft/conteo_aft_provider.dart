@@ -40,9 +40,20 @@ class ConteoAftNotifier extends StateNotifier<ConteoAftState> {
   Future<void> createNuevoConteoGeneral() async {
     final isOk = await _conteoRepository.createConteoGeneral();
     if (isOk) {
-      fetchConteosPlanificados();
+      fetchConteosProcesos();
     } else {
-      print('Error al crear conteo general');
+      // print('Error al crear conteo general');
+    }
+  }
+
+  Future<void> deleteConteo(String conteoId) async {
+    final isOk = await _conteoRepository.deleteConteo(conteoId);
+    if (isOk) {
+      fetchConteosProcesos();
+      fetchConteosPlanificados();
+      fetchConteosTerminados();
+    } else {
+      // print('Error al eliminar conteo');
     }
   }
 }

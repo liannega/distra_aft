@@ -3,6 +3,4 @@ class SharedPrefsKey {
   static const String authTokenKey = 'auth_token';
   static const String currentUserDataKey = 'currentUserDataKey';
   static const String currentUserIdkey = 'currentUserIdkey';
-
-
 }
