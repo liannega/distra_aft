@@ -1,0 +1,10 @@
+import 'package:dsimcaf_1/domain/entities/conteo.dart';
+
+abstract class ConteoRepository {
+  Future<List<Conteo>> getConteosProcesos();
+  Future<List<Conteo>> getConteosPlanificados();
+  Future<List<Conteo>> getConteosTerminados();
+  Future<bool> createConteoGeneral();
+  Future<bool> deleteConteo(String conteoId);
+  Future<bool> updateEstadoConteo(String conteoId, String newEstado);
+}

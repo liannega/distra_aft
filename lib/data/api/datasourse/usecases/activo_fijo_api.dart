@@ -1,10 +1,10 @@
-import 'package:dsimcaf_1/data/models/activo_fijo_model.dart';
+import 'package:dsimcaf_1/data/api/models/activo_fijo_model.dart';
 import 'package:dsimcaf_1/data/myDio/custom_response.dart';
 import 'package:dsimcaf_1/data/myDio/my_dio.dart';
 import 'package:dsimcaf_1/data/placeholder/activos_placeholder.dart';
 import 'package:dsimcaf_1/data/placeholder/uh_placeholder.dart';
 import 'package:dsimcaf_1/domain/entities/activo_fijo.dart';
-import 'package:dsimcaf_1/domain/repositories/usecases/activo_fijo_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/remote/usecases/activo_fijo_repository.dart';
 
 class ActivoFijoApi extends ActivoRepository {
   final MyDio _dio;
@@ -37,11 +37,7 @@ class ActivoFijoApi extends ActivoRepository {
       //     if (codigo != null) 'codigo': codigo,
       //     if (denominacion != null) 'denominacion': denominacion,
       //     if (nroSerie != null) 'nro_serie': nroSerie,
-      //     if (nroInventario != null) 'nro_inventario': nroInventario,
-      //     if (responsable != null) 'responsable': responsable,
-      //     if (estadoOperacion != null) 'estado_operacion': estadoOperacion,
-      //     if (estadoTecnico != null) 'estado_tecnico': estadoTecnico,
-      //     if (areaResponsabilidad != null)
+      //     if (nroInventario !== null)
       //       'area_responsabilidad': areaResponsabilidad,
       //     if (marca != null) 'marca': marca,
       //     if (modelo != null) 'modelo': modelo,

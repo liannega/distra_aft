@@ -1,11 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ConfirmacionConteoModal extends StatelessWidget {
   final String tipoMedio;
   final Map<String, dynamic> criterios;
-  final VoidCallback onConfirmar;
+  final Function(WidgetRef ref) onConfirmar;
   final VoidCallback onCancelar;
 
   const ConfirmacionConteoModal({
@@ -177,23 +178,27 @@ class ConfirmacionConteoModal extends StatelessWidget {
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: ElevatedButton(
-                      onPressed: onConfirmar,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Iniciar',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                    child: Consumer(
+                      builder: (_, WidgetRef ref, __) {
+                        return ElevatedButton(
+                          onPressed: () => onConfirmar(ref),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Iniciar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

@@ -20,6 +20,12 @@ class UserPermissions {
 
 class PredefinedUsers {
   static const Map<String, Map<String, String>> users = {
+    'xetid_user_api_consumer': {
+      'password': 'X3t1d/*-+2022.,',
+      'name': 'distra',
+      'role': 'Api Distra',
+      'profile': 'real',
+    },
     'admin': {
       'password': '123456',
       'name': 'Carlos Rodríguez',

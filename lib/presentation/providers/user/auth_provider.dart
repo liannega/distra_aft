@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dsimcaf_1/config/constants/shared_prefs_key.dart';
 import 'package:dsimcaf_1/domain/entities/distra_entitie.dart';
-import 'package:dsimcaf_1/domain/repositories/usecases/auth_repository.dart';
+import 'package:dsimcaf_1/domain/repositories/remote/usecases/auth_repository.dart';
 import 'package:dsimcaf_1/presentation/providers/api_configuration_provider.dart';
 import 'package:dsimcaf_1/presentation/providers/data/api_provider.dart';
 
