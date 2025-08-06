@@ -1,3 +1,6 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:dsimcaf_1/config/constants/conteo_estado.dart';
 import 'package:dsimcaf_1/domain/entities/conteo.dart';
 import 'package:dsimcaf_1/presentation/providers/conteo_aft/conteo_aft_provider.dart';
 import 'package:flutter/material.dart';
@@ -98,24 +101,49 @@ class ConteoCard extends StatelessWidget {
                 );
               },
             ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit, color: Colors.green[600]),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.remove_red_eye_outlined,
-                    color: Colors.blue[600],
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.download, color: Colors.orange[600]),
-                ),
-              ],
+            Consumer(
+              builder: (_, WidgetRef ref, __) {
+                return Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(conteoAftProvider.notifier)
+                            .updateConteoEstado(
+                              conteo.id,
+                              ConteoEstado.enProceso.toString(),
+                            );
+                      },
+                      icon: Icon(Icons.edit, color: Colors.green[600]),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(conteoAftProvider.notifier)
+                            .updateConteoEstado(
+                              conteo.id,
+                              ConteoEstado.planificado.toString(),
+                            );
+                      },
+                      icon: Icon(
+                        Icons.remove_red_eye_outlined,
+                        color: Colors.blue[600],
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(conteoAftProvider.notifier)
+                            .updateConteoEstado(
+                              conteo.id,
+                              ConteoEstado.terminado.toString(),
+                            );
+                      },
+                      icon: Icon(Icons.download, color: Colors.orange[600]),
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),

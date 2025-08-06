@@ -66,12 +66,27 @@ class ConteoDb extends ConteoRepository {
   Future<List<Conteo>> getConteosTerminados() {
     return _getAllConteos(ConteoEstado.terminado);
   }
-  
+
   @override
   Future<bool> deleteConteo(String conteoId) {
     try {
       return _sqliteHandler.delete(
         DbConstanst.conteoTable,
+        where: 'id = ?',
+        whereArgs: [conteoId],
+      );
+    } catch (e) {
+      // print('Error deleting conteo: $e');
+      throw Exception('Error deleting conteo: $e');
+    }
+  }
+
+  @override
+  Future<bool> updateEstadoConteo(String conteoId, String newEstado) {
+    try {
+      return _sqliteHandler.update(
+        DbConstanst.conteoTable,
+        {'estado': newEstado},
         where: 'id = ?',
         whereArgs: [conteoId],
       );

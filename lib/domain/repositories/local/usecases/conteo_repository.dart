@@ -6,4 +6,5 @@ abstract class ConteoRepository {
   Future<List<Conteo>> getConteosTerminados();
   Future<bool> createConteoGeneral();
   Future<bool> deleteConteo(String conteoId);
+  Future<bool> updateEstadoConteo(String conteoId, String newEstado);
 }

@@ -19,26 +19,6 @@ class ConteoAFTPage extends ConsumerStatefulWidget {
 
 class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _searchQuery = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-
-    _tabController.addListener(() {
-      setState(() {}); // Esto actualiza el FAB cuando cambias de pestaña
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
   void showVerificationModal() {
     showModalBottomSheet(
       context: context,
@@ -58,18 +38,6 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
         );
       },
     );
-  }
-
-  void _handleSearch(String query) {
-    setState(() {
-      _searchQuery = query;
-    });
-  }
-
-  void _clearSearch() {
-    setState(() {
-      _searchQuery = '';
-    });
   }
 
   void _handleScanOption(String option) {
@@ -115,6 +83,9 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
 
   @override
   Widget build(BuildContext context) {
+    if (ref.read(conteoAftProvider.notifier).tabController == null) {
+      ref.read(conteoAftProvider.notifier).initTabController(this);
+    }
     final conteoAftState = ref.watch(conteoAftProvider);
     print("waka conteosProceso ${conteoAftState.conteosProceso.length}");
     return WillPopScope(
@@ -152,13 +123,19 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
         return shouldPop ?? false;
       },
       child: Scaffold(
-        key: _scaffoldKey,
+        key: ref.read(conteoAftProvider.notifier).scaffoldKey,
         backgroundColor: const Color(0xFFF8FAFC),
         appBar: SearchAppBar(
           title: 'Conteos AFT',
-          onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-          onSearch: _handleSearch,
-          onSearchClear: _clearSearch,
+          onMenuPressed:
+              () =>
+                  ref
+                      .read(conteoAftProvider.notifier)
+                      .scaffoldKey
+                      .currentState
+                      ?.openDrawer(),
+          onSearch: ref.read(conteoAftProvider.notifier).handleSearch,
+          onSearchClear: ref.read(conteoAftProvider.notifier).clearSearch,
           onScanOption: _handleScanOption,
           hasDrawer: true,
         ),
@@ -166,11 +143,12 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
         floatingActionButton: Builder(
           builder: (context) {
             bool isVisible = true;
-            if (_tabController.index == 0) {
+            final index = conteoAftState.currentIndex;
+            if (index == 0) {
               isVisible = conteoAftState.conteosProceso.isNotEmpty;
-            } else if (_tabController.index == 1) {
+            } else if (index == 1) {
               isVisible = conteoAftState.conteosPlanificados.isNotEmpty;
-            } else if (_tabController.index == 2) {
+            } else if (index == 2) {
               isVisible = conteoAftState.conteosTerminados.isNotEmpty;
             }
             return AnimatedSwitcher(
@@ -215,7 +193,7 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
                 ],
               ),
               child: TabBar(
-                controller: _tabController,
+                controller: ref.read(conteoAftProvider.notifier).tabController,
                 labelColor: Colors.white,
                 unselectedLabelColor: const Color(0xFF64748B),
                 indicator: BoxDecoration(
@@ -262,19 +240,22 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
             // Content
             Expanded(
               child: TabBarView(
-                controller: _tabController,
+                controller: ref.read(conteoAftProvider.notifier).tabController,
                 children: [
                   _buildConteoTab(
                     conteoAftState.conteosProceso,
                     const Color(0xFF3B82F6),
+                    conteoAftState,
                   ),
                   _buildConteoTab(
                     conteoAftState.conteosPlanificados,
                     const Color(0xFF8B5CF6),
+                    conteoAftState,
                   ),
                   _buildConteoTab(
                     conteoAftState.conteosTerminados,
                     const Color(0xFF10B981),
+                    conteoAftState,
                   ),
                 ],
               ),
@@ -308,7 +289,12 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
     );
   }
 
-  Widget _buildEmptyState(String tabName, IconData tabIcon, Color accentColor) {
+  Widget _buildEmptyState(
+    ConteoAftState conteoAftState,
+    String tabName,
+    IconData tabIcon,
+    Color accentColor,
+  ) {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
@@ -387,7 +373,7 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    _searchQuery.isNotEmpty
+                                    conteoAftState.searchQuery.isNotEmpty
                                         ? 'Sin resultados'
                                         : 'Sin datos',
                                     style: TextStyle(
@@ -413,8 +399,8 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
 
           // Título principal
           Text(
-            _searchQuery.isNotEmpty
-                ? 'Sin resultados para "$_searchQuery"'
+            conteoAftState.searchQuery.isNotEmpty
+                ? 'Sin resultados para "${conteoAftState.searchQuery}"'
                 : 'No hay verificaciones $tabName',
             textAlign: TextAlign.center,
             style: const TextStyle(
@@ -430,7 +416,7 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
-              _searchQuery.isNotEmpty
+              conteoAftState.searchQuery.isNotEmpty
                   ? 'Intenta con otros términos de búsqueda o revisa la ortografía'
                   : _getEmptyStateDescription(tabName),
               textAlign: TextAlign.center,
@@ -444,7 +430,7 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
 
           const SizedBox(height: 32),
 
-          if (_searchQuery.isEmpty)
+          if (conteoAftState.searchQuery.isEmpty)
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -495,9 +481,18 @@ class _ConteoAFTPageState extends ConsumerState<ConteoAFTPage>
     }
   }
 
-  Widget _buildConteoTab(List<Conteo> conteos, Color accentColor) {
+  Widget _buildConteoTab(
+    List<Conteo> conteos,
+    Color accentColor,
+    ConteoAftState conteoAftState,
+  ) {
     if (conteos.isEmpty) {
-      return _buildEmptyState("sin datos", Icons.search_off, accentColor);
+      return _buildEmptyState(
+        conteoAftState,
+        "sin datos",
+        Icons.search_off,
+        accentColor,
+      );
     }
 
     return ListView.builder(

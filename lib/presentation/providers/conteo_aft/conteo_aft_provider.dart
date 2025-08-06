@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dsimcaf_1/domain/entities/conteo.dart';
@@ -15,6 +16,13 @@ class ConteoAftNotifier extends StateNotifier<ConteoAftState> {
   }
 
   final ConteoRepository _conteoRepository;
+  TabController? tabController;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  void dispose() {
+    tabController?.dispose();
+    super.dispose();
+  }
 
   void init() async {
     await fetchConteosProcesos();
@@ -56,24 +64,59 @@ class ConteoAftNotifier extends StateNotifier<ConteoAftState> {
       // print('Error al eliminar conteo');
     }
   }
+
+  Future<void> updateConteoEstado(String conteoId, String estado) async {
+    final isOk = await _conteoRepository.updateEstadoConteo(conteoId, estado);
+    if (isOk) {
+      fetchConteosProcesos();
+      fetchConteosPlanificados();
+      fetchConteosTerminados();
+    } else {
+      // print('Error al eliminar conteo');
+    }
+  }
+
+  void initTabController(conteoAFTPageState) {
+    tabController = TabController(length: 3, vsync: conteoAFTPageState);
+
+    tabController?.addListener(() {
+      state = state.copyWith(currentIndex: tabController!.index);
+    });
+  }
+
+  void handleSearch(String query) {
+    state = state.copyWith(searchQuery: query);
+  }
+
+  void clearSearch() {
+    state = state.copyWith(searchQuery: '');
+  }
 }
 
 class ConteoAftState {
+  final int currentIndex;
+  final String searchQuery;
   final List<Conteo> conteosProceso;
   final List<Conteo> conteosPlanificados;
   final List<Conteo> conteosTerminados;
   ConteoAftState({
+    this.currentIndex = 0,
+    this.searchQuery = '',
     this.conteosProceso = const [],
     this.conteosPlanificados = const [],
     this.conteosTerminados = const [],
   });
 
   ConteoAftState copyWith({
+    int? currentIndex,
+    String? searchQuery,
     List<Conteo>? conteosProceso,
     List<Conteo>? conteosPlanificados,
     List<Conteo>? conteosTerminados,
   }) {
     return ConteoAftState(
+      currentIndex: currentIndex ?? this.currentIndex,
+      searchQuery: searchQuery ?? this.searchQuery,
       conteosProceso: conteosProceso ?? this.conteosProceso,
       conteosPlanificados: conteosPlanificados ?? this.conteosPlanificados,
       conteosTerminados: conteosTerminados ?? this.conteosTerminados,
